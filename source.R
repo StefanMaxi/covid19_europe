@@ -184,12 +184,3 @@ daily.incedence <- function(Daten, end = Sys.Date(), intervall = 7, relative = T
   return(daily.data)
 }
 
-data <- update.data()
-Daten <- translate.DE(data)
-View(data)
-transform.data(Daten)
-View(Daten)
-cases <- daily.cases(Daten, end = "2020-11-14", relative = FALSE)
-View(cases)
-incedence <- daily.incedence(Daten, end = "2020-11-14", intervall = 30, relative = FALSE)
-View(incedence)
