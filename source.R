@@ -87,10 +87,10 @@ translate.DE <- function(data) {
   
   #Belgium
   names(Daten$belgium$belgium_age.sex) <- c("Datum", "Bundesland", "Landkreis", "Altersgruppe", "Geschlecht", "bel.Fälle")
-  #names(Daten$belgium$belgium_countys) <- c()
-  #names(Daten$belgium$belgium_hospilisation) <- c()
-  #names(Daten$belgium$belgium_mortality) <- c()
-  #names(Daten$belgium$belgium_tests) <- c()
+  names(Daten$belgium$belgium_countys) <- c("NIS5", "Gemeinde.NL", "Gemeinde.FR", "Arrondissement.NL", "Arrondissement.FR", "Bundesland", "Landkreis", "Fälle")
+  names(Daten$belgium$belgium_hospilisation) <- c("Datum", "Bundesland", "Landkreis", "Nr.Reporting", "Alle.in", "Alle.in.ICU", "Alle.in.RESP", "Alle.in.ECMO", "Neue.in", "Neue.raus") 
+  names(Daten$belgium$belgium_mortality) <- c("Datum", "Landkreis", "Altersgruppe", "Geschlecht", "Todesfälle")
+  names(Daten$belgium$belgium_tests) <- c("Datum", "Bundesland", "Landkreis", "Tests", "positiv")
   
   #Tschechien
   names(Daten$czech$czech_1) <- c("Datum", "Bundesland", "Landkreis", "Gesamtfallzahl", "Gesamtgeheiltenzahl", "Gesamttodeszahl") ## Gliederung Tschechien 
@@ -110,13 +110,13 @@ translate.DE <- function(data) {
   names(Daten$sweden$sweden_1) <- c("Datum", "swe.Fälle", "Blekinge", "Dalarna", "Gotland", "Gävleborg", "Halland", "Jämtland_Härjedalen", "Jönköping",
                                     "Kalmar", "Kronoberg", "Norrbotten", "Skåne", "Stockholm", "Sörmland", "Uppsala", "Värmland", "Västerbotten", "Västernorrland",
                                     "Västmanland", "Västra_Götaland ", "Örebro", "Östergötland")
-  #names(Daten$sweden$sweden_2) <- c()
-  #names(Daten$sweden$sweden_3) <- c()
-  #names(Daten$sweden$sweden_4) <- c()
-  #names(Daten$sweden$sweden_5) <- c()
-  #names(Daten$sweden$sweden_6) <- c()
-  #names(Daten$sweden$sweden_7) <- c()
-  #names(Daten$sweden$sweden_8) <- c()
+  names(Daten$sweden$sweden_2) <- c("Datum", "Todesfälle")
+  names(Daten$sweden$sweden_3) <- c("Datum.Begin.der.Pflege", "Anzahl.intensive.care")
+  names(Daten$sweden$sweden_4) <- c("Landkreis", "Fälle", "Fallzahl.pro.100.000.Einwohner", "Anzahl.Fälle.intensive.care", "Todesfälle")
+  names(Daten$sweden$sweden_5) <- c("Geschlecht", "Fälle", "Anzahl.Fälle.intensive.care", "Todesfälle")
+  names(Daten$sweden$sweden_6) <- c("Altersgruppe", "Fälle", "Anzahl.der.Fälle.intensive.care", "Todesfälle")
+  #names(Daten$sweden$sweden_7) <- c("Wochen.Nr", "Landkreis", "Anzahl.der.Fälle.der.Woche", )
+  names(Daten$sweden$sweden_8) <- c("Wochen.Nr", "Kn.Code", "Kn.Name", "Kreis", "Gemeindebezirk", "Gesamtzahl.der.Fälle.pro.10000.Einwohner", "Anzahl.der.Fälle.pro.10000.Einwohner", "Gesamtzahl.der.Fälle", "neue.Fälle.der.Woche")
   
   
   
