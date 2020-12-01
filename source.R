@@ -111,11 +111,11 @@ translate.DE <- function(data) {
                                     "Kalmar", "Kronoberg", "Norrbotten", "Skåne", "Stockholm", "Sörmland", "Uppsala", "Värmland", "Västerbotten", "Västernorrland",
                                     "Västmanland", "Västra_Götaland ", "Örebro", "Östergötland")
   names(Daten$sweden$sweden_2) <- c("Datum", "Todesfälle")
-  names(Daten$sweden$sweden_3) <- c("Datum.Begin.der.Pflege", "Anzahl.intensive.care")
-  names(Daten$sweden$sweden_4) <- c("Landkreis", "Fälle", "Fallzahl.pro.100.000.Einwohner", "Anzahl.Fälle.intensive.care", "Todesfälle")
-  names(Daten$sweden$sweden_5) <- c("Geschlecht", "Fälle", "Anzahl.Fälle.intensive.care", "Todesfälle")
-  names(Daten$sweden$sweden_6) <- c("Altersgruppe", "Fälle", "Anzahl.der.Fälle.intensive.care", "Todesfälle")
-  #names(Daten$sweden$sweden_7) <- c("Wochen.Nr", "Landkreis", "Anzahl.der.Fälle.der.Woche", )
+  names(Daten$sweden$sweden_3) <- c("Datum.Begin.der.Pflege", "Anzahl.ICU")
+  names(Daten$sweden$sweden_4) <- c("Landkreis", "Fälle", "Fallzahl.pro.100.000.Einwohner", "Anzahl.Fälle.IC", "Todesfälle")
+  names(Daten$sweden$sweden_5) <- c("Geschlecht", "Fälle", "Anzahl.Fälle.ICU", "Todesfälle")
+  names(Daten$sweden$sweden_6) <- c("Altersgruppe", "Fälle", "Anzahl.der.Fälle.IC", "Todesfälle")
+  names(Daten$sweden$sweden_7) <- c("Wochen.Nr", "Landkreis", "Anzahl.der.Fälle.der.Woche", "Gesamtzahl.der.Fälle", "Anzahl.Fälle.IC.der.Woche", "Gesamtzahl.der.Fälle.IC", "Todesfälle.der.Woche", "Gesamtzahl.der.Todesfälle", "Fallzahl.pro.100.000.Einwohner.der.Woche", "Gesamte.Fallzahl.pro.100.000.Einwohner")
   names(Daten$sweden$sweden_8) <- c("Wochen.Nr", "Kn.Code", "Kn.Name", "Kreis", "Gemeindebezirk", "Gesamtzahl.der.Fälle.pro.10000.Einwohner", "Anzahl.der.Fälle.pro.10000.Einwohner", "Gesamtzahl.der.Fälle", "neue.Fälle.der.Woche")
   
   
