@@ -83,7 +83,7 @@ translate.DE <- function(data) {
   names(Daten$bavaria$lgl$bavaria_lgl_weeks2) <- c("Kalenderwoche", "Altersgruppe", "Inzidenz", "Fälle")
   names(Daten$bavaria$lgl$bavaria_lgl_tests) <- c("Datum", "Tests", "positiv", "negativ", "Positivrate")
   
-  #names(Daten$bavaria$rki$bavaria_rki) <- c()
+  names(Daten$bavaria$rki$bavaria_rki) <- c("FID","IdBundesland","Bundesland","Landkreis","Altersgruppe","Geschlecht","AnzahlFall","AnzahlTodesfall","Meldedatum","IdLandkreis","Datenstand","NeuerFall","NeuerTodesfall","Refdatum","NeuGenesen","AnzahlGenesen","IstErkrankungsbeginn","Altergruppe2")
   
   #Belgium
   names(Daten$belgium$belgium_age.sex) <- c("Datum", "Bundesland", "Landkreis", "Altersgruppe", "Geschlecht", "bel.Fälle")
@@ -94,18 +94,18 @@ translate.DE <- function(data) {
   
   #Tschechien
   names(Daten$czech$czech_1) <- c("Datum", "Bundesland", "Landkreis", "Gesamtfallzahl", "Gesamtgeheiltenzahl", "Gesamttodeszahl") ## Gliederung Tschechien 
-  #names(Daten$czech$czech_2) <- c()
+  names(Daten$czech$czech_2) <- c("Wochentag","Datum","Bundesland","BundeslandName","Landkreis","LandkreisName","Postleitzahl","PLZName","Distrikt","DistriktName","MCCode","Neuerfälle","AktuellefälleZahl")
   names(Daten$czech$czech_3) <- c("Datum", "tsc.Fälle", "Gesamtfallzahl")
-  #names(Daten$czech$czech_4) <- c()
-  #names(Daten$czech$czech_5) <- c()
-  #names(Daten$czech$czech_6) <- c()
-  #names(Daten$czech$czech_7) <- c()
-  #names(Daten$czech$czech_8) <- c()
-  #names(Daten$czech$czech_9) <- c()
-  #names(Daten$czech$czech_10) <- c()
-  #names(Daten$czech$czech_11) <- c()
-  #names(Daten$czech$czech_12) <- c()
-  
+  names(Daten$czech$czech_4) <- c("Datum","Gesamtfallzahl","Gesamtgeheiltenzahl","Gesamttodeszahl","Gesamttestzahl")
+  names(Daten$czech$czech_5) <- c("Wochentag","Datum","Bundesland","BundeslandName","Landkreis","LandkreisName","Postleitzahl","PLZName","Distrikt","DistriktName","Gemeinde","GemeindeName","Neuerfälle","Aktuellelfälle")
+  names(Daten$czech$czech_6) <- c("Datum","Alter","Geschlecht","Bundesland","Landkreis","AuslandInfektionZahl","AuslandCode")
+  names(Daten$czech$czech_7) <- c("HilfeProdukt","Bundesland","GesamtMenge")
+  names(Daten$czech$czech_8) <- c("Datum","tsc.Testzahl","GesamtfälleAnzahl_Test","tsc.Anzahl_1stTest","GesamfälleAnzahl_1stTest")
+  names(Daten$czech$czech_9) <- c("Datum","Alter","Geschlecht","Bundesland","Landkreis")
+  names(Daten$czech$czech_10) <- c("Datum","Alter","Geschlecht","Bundesland","Landkreis")
+  names(Daten$czech$czech_11) <- c("Wochentag","Postleitzahl","PLZName","Inzidenz_7","Inzidenz_65_7","Häufigkeit","Häufigkeit_65","Häufigkeit_75","Aktuelle_Krankenhauspatient","Neuezahl_Krankenhauspatient_7","Testzahl_7")
+  names(Daten$czech$czech_12) <- c("Datum","GesamtTest","Insgesamtfälle","Aktuellefälle","AnzahlGenesen","Todesfälle","Aktuelle_KrankenhausPatient","AnzhalTest_Gestern","Anzahlfälle_Gestern","Anzahlfälle_Heute","GesternDatum","Insgesamtfallzahl_Datum_Gestern","Insgesamtfallzahl_Datum_Heute")
+ 
   #Schweden
   names(Daten$sweden$sweden_1) <- c("Datum", "swe.Fälle", "Blekinge", "Dalarna", "Gotland", "Gävleborg", "Halland", "Jämtland_Härjedalen", "Jönköping",
                                     "Kalmar", "Kronoberg", "Norrbotten", "Skåne", "Stockholm", "Sörmland", "Uppsala", "Värmland", "Västerbotten", "Västernorrland",
