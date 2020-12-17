@@ -6,7 +6,7 @@ Daten <- translate.DE(data)
 transform.data(Daten)
 
 ##Daten anzeigen
-View(datan)
+View(data)
 View(Daten)
 
 ##Bilden von Fallzahl/Tag Tabelle (Beispiele)
@@ -20,15 +20,15 @@ cases.per.day.relative1 <- daily.cases(Daten, end = "2020-11-14", relative = TRU
 View(cases.per.day.relative1)
 
 ##Bilden von Inzidenz Tabelle (Beispiele)
-incedence30 <- daily.incedence(Daten, end = "2020-11-14", intervall = 30, relative = FALSE)
+incidence30 <- daily.incedence(Daten, end = "2020-11-14", intervall = 30, relative = FALSE)
 View(incedence30)
 
-incedence7 <- daily.incedence(Daten, end = "2020-11-14", intervall = 7, relative = FALSE)
+incidence7 <- daily.incedence(Daten, end = "2020-11-14", intervall = 7, relative = FALSE)
 View(incedence7)
 
-incedence3 <- daily.incedence(Daten, end = "2020-11-14", intervall = 3, relative = FALSE)
+incidence3 <- daily.incedence(Daten, end = "2020-11-14", intervall = 3, relative = FALSE)
 View(incedence3)
 
-incedence7abs <- daily.incedence(Daten, end = "2020-11-14", intervall = 7, relative = TRUE)
+incidence7abs <- daily.incedence(Daten, end = "2020-11-14", intervall = 7, relative = TRUE)
 View(incedence7abs)
 

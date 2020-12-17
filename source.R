@@ -20,7 +20,7 @@ update.data <- function() {
   bavaria_rki           <- as.data.table(read.csv("data/bavaria/rki/RKI_COVID19.csv", encoding="UTF-8"))
   
   rki <- list(bavaria_rki)
-  
+  names(rki) <- c("bavaria_rki")
   bavaria <- list(lgl = lgl, rki = rki)
   
   
@@ -103,7 +103,7 @@ translate.DE <- function(data) {
   names(Daten$czech$czech_8) <- c("Datum","tsc.Testzahl","GesamtfälleAnzahl_Test","tsc.Anzahl_1stTest","GesamfälleAnzahl_1stTest")
   names(Daten$czech$czech_9) <- c("Datum","Alter","Geschlecht","Bundesland","Landkreis")
   names(Daten$czech$czech_10) <- c("Datum","Alter","Geschlecht","Bundesland","Landkreis")
-  names(Daten$czech$czech_11) <- c("Wochentag","Postleitzahl","PLZName","Inzidenz_7","Inzidenz_65_7","Häufigkeit","Häufigkeit_65","Häufigkeit_75","Aktuelle_Krankenhauspatient","Neuezahl_Krankenhauspatient_7","Testzahl_7")
+  names(Daten$czech$czech_11) <- c("Wochentag","Datum","Postleitzahl","PLZName","Inzidenz_7","Inzidenz_65_7","Inzidenz_75_7","Häufigkeit","Häufigkeit_65","Häufigkeit_75","Aktuelle_Krankenhauspatient","Neuezahl_Krankenhauspatient_7","Testzahl_7")
   names(Daten$czech$czech_12) <- c("Datum","GesamtTest","Insgesamtfälle","Aktuellefälle","AnzahlGenesen","Todesfälle","Aktuelle_KrankenhausPatient","AnzhalTest_Gestern","Anzahlfälle_Gestern","Anzahlfälle_Heute","GesternDatum","Insgesamtfallzahl_Datum_Gestern","Insgesamtfallzahl_Datum_Heute")
  
   #Schweden
