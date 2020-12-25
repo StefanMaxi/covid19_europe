@@ -2,15 +2,15 @@
 update.data <- function() { 
   #BAVARIA
   
-  bavaria_lgl_overview  <- as.data.table(read.csv("data/bavaria/lgl/tabelle_01_20201117.csv", skip = 1, sep = ";", encoding="UTF-8"))
-  bavaria_lgl_change    <- as.data.table(read.csv("data/bavaria/lgl/tabelle_02_20201117.csv", skip = 1, sep = ";", encoding="UTF-8"))
-  bavaria_lgl_regions   <- as.data.table(read.csv("data/bavaria/lgl/tabelle_03_20201117.csv", skip = 1, sep = ";", encoding="UTF-8"))
-  bavaria_lgl_countys   <- as.data.table(read.csv("data/bavaria/lgl/tabelle_04_20201117.csv", skip = 1, sep = ";", encoding="UTF-8"))
-  bavaria_lgl_days      <- as.data.table(read.csv("data/bavaria/lgl/tabelle_05_20201117.csv", skip = 1, sep = ";", encoding="UTF-8", dec = "."))
-  bavaria_lgl_weeks1    <- as.data.table(read.csv("data/bavaria/lgl/tabelle_06_20201117.csv", skip = 1, sep = ";", encoding="UTF-8"))
-  bavaria_lgl_age       <- as.data.table(read.csv("data/bavaria/lgl/tabelle_07_20201117.csv", skip = 1, sep = ";", encoding="UTF-8"))
-  bavaria_lgl_weeks2    <- as.data.table(read.csv("data/bavaria/lgl/tabelle_08_20201117.csv", skip = 1, sep = ";", encoding="UTF-8"))
-  bavaria_lgl_tests     <- as.data.table(read.csv("data/bavaria/lgl/tabelle_09_20201117.csv", skip = 1, sep = ";", encoding="UTF-8"))
+  bavaria_lgl_overview  <- as.data.table(read.csv("data/bavaria/lgl/tabelle_01_20201221.csv", skip = 1, sep = ";", encoding="UTF-8"))
+  bavaria_lgl_change    <- as.data.table(read.csv("data/bavaria/lgl/tabelle_02_20201221.csv", skip = 1, sep = ";", encoding="UTF-8"))
+  bavaria_lgl_regions   <- as.data.table(read.csv("data/bavaria/lgl/tabelle_03_20201221.csv", skip = 1, sep = ";", encoding="UTF-8"))
+  bavaria_lgl_countys   <- as.data.table(read.csv("data/bavaria/lgl/tabelle_04_20201221.csv", skip = 1, sep = ";", encoding="UTF-8"))
+  bavaria_lgl_days      <- as.data.table(read.csv("data/bavaria/lgl/tabelle_05_20201221.csv", skip = 1, sep = ";", encoding="UTF-8", dec = "."))
+  bavaria_lgl_weeks1    <- as.data.table(read.csv("data/bavaria/lgl/tabelle_06_20201221.csv", skip = 1, sep = ";", encoding="UTF-8"))
+  bavaria_lgl_age       <- as.data.table(read.csv("data/bavaria/lgl/tabelle_07_20201221.csv", skip = 1, sep = ";", encoding="UTF-8"))
+  bavaria_lgl_weeks2    <- as.data.table(read.csv("data/bavaria/lgl/tabelle_08_20201221.csv", skip = 1, sep = ";", encoding="UTF-8"))
+  bavaria_lgl_tests     <- as.data.table(read.csv("data/bavaria/lgl/tabelle_09_20201221.csv", skip = 1, sep = ";", encoding="UTF-8"))
   
   lgl <- list(bavaria_lgl_overview, bavaria_lgl_change, bavaria_lgl_regions, bavaria_lgl_countys, bavaria_lgl_days,
               bavaria_lgl_weeks1, bavaria_lgl_age, bavaria_lgl_weeks2, bavaria_lgl_tests)
@@ -79,7 +79,7 @@ translate.DE <- function(data) {
   names(Daten$bavaria$lgl$bavaria_lgl_county) <- c("Landkreis.Stadt", "Anzahl.der.Fälle", "Fälle.Änderung.zum.Vortag", "Fallzahl.pro.100.000.Einwohner", "Fälle.der.letzten.7.Tage", "X7.Tage.Inzidenz.pro.100.000.Einwohner", "Anzahl.der.Todesfälle", "Todesfälle.Änderung.zum.Vortag")
   names(Daten$bavaria$lgl$bavaria_lgl_days) <- c("Datum", "Vortag.bekannt", "Heute.bekannt", "bay.Fälle")
   names(Daten$bavaria$lgl$bavaria_lgl_weeks1) <- c("Kalenderwoche", "Altersgruppe", "Inzidenz", "Fälle")
-  names(Daten$bavaria$lgl$bavaria_lgl_age) <- c("Altersgruppe", "weiblich", "männlich", "unbekannt")
+  names(Daten$bavaria$lgl$bavaria_lgl_age) <- c("Altersgruppe", "weiblich", "maennlich", "unbekannt")
   names(Daten$bavaria$lgl$bavaria_lgl_weeks2) <- c("Kalenderwoche", "Altersgruppe", "Inzidenz", "Fälle")
   names(Daten$bavaria$lgl$bavaria_lgl_tests) <- c("Datum", "Tests", "positiv", "negativ", "Positivrate")
   
@@ -115,8 +115,8 @@ translate.DE <- function(data) {
   names(Daten$sweden$sweden_4) <- c("Landkreis", "Fälle", "Fallzahl.pro.100.000.Einwohner", "Anzahl.Fälle.IC", "Todesfälle")
   names(Daten$sweden$sweden_5) <- c("Geschlecht", "Fälle", "Anzahl.Fälle.ICU", "Todesfälle")
   names(Daten$sweden$sweden_6) <- c("Altersgruppe", "Fälle", "Anzahl.der.Fälle.IC", "Todesfälle")
-  names(Daten$sweden$sweden_7) <- c("Wochen.Nr", "Landkreis", "Anzahl.der.Fälle.der.Woche", "Gesamtzahl.der.Fälle", "Anzahl.Fälle.IC.der.Woche", "Gesamtzahl.der.Fälle.IC", "Todesfälle.der.Woche", "Gesamtzahl.der.Todesfälle", "Fallzahl.pro.100.000.Einwohner.der.Woche", "Gesamte.Fallzahl.pro.100.000.Einwohner")
-  names(Daten$sweden$sweden_8) <- c("Wochen.Nr", "Kn.Code", "Kn.Name", "Kreis", "Gemeindebezirk", "Gesamtzahl.der.Fälle.pro.10000.Einwohner", "Anzahl.der.Fälle.pro.10000.Einwohner", "Gesamtzahl.der.Fälle", "neue.Fälle.der.Woche")
+  names(Daten$sweden$sweden_7) <- c("Jahr", "Wochen.Nr", "Landkreis", "Anzahl.der.Fälle.der.Woche", "Gesamtzahl.der.Fälle", "Anzahl.Fälle.IC.der.Woche", "Gesamtzahl.der.Fälle.IC", "Todesfälle.der.Woche", "Gesamtzahl.der.Todesfälle", "Fallzahl.pro.100.000.Einwohner.der.Woche", "Gesamte.Fallzahl.pro.100.000.Einwohner")
+  names(Daten$sweden$sweden_8) <- c("Jahr", "Wochen.Nr", "Kn.Code", "Kn.Name", "Kreis", "Gemeindebezirk", "Gesamtzahl.der.Fälle.pro.10000.Einwohner", "Anzahl.der.Fälle.pro.10000.Einwohner", "Gesamtzahl.der.Fälle", "neue.Fälle.der.Woche")
   
   
   
