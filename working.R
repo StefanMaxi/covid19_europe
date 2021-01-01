@@ -54,7 +54,7 @@ ggplot(bayern.sex.and.age,aes(Altersgruppe, cases, fill=sex))+geom_bar(stat="ide
 #Altersgruppe(ohne geschlecht)
 Bayern.age <- data.frame(Altersgruppe = c("0-9","10-19","20-29","30-39","40-49","50-59","60-69","70-79","80-89","90-99","Aelter als 100", "unbekannt"),
                          Faelle = bayer.age.casessum)
-ggplot(Bayern.age,aes(Altersgruppe, Faelle))+geom_bar(stat="identity",position = "dodge")
+ggplot(Bayern.age,aes(Altersgruppe, Faelle))+geom_bar(stat="identity",position = "dodge")+ggtitle("Bayern")
 
 #Belgien
 belgien.age.sex <- (Daten$belgium$belgium_age.sex)
@@ -87,7 +87,7 @@ Belgien.age <- data.frame(Altersgruppe = c("0-9","10-19","20-29","30-39","40-49"
                           Faelle = c(b.a.0, b.a.1, b.a.2, b.a.3, b.a.4, b.a.5, b.a.6, b.a.7, b.a.8, b.a.9, b.a.10))
 
 Belgien.age
-ggplot(Belgien.age,aes(Altersgruppe, Faelle))+geom_bar(stat="identity",position = "dodge")
+ggplot(Belgien.age,aes(Altersgruppe, Faelle))+geom_bar(stat="identity",position = "dodge")+ggtitle("Belgien")
 
 #if sex neet to be seperated
 #belgien.0.9.f <- nrow(subset(belgien.0.9,Geschlecht == "F"))
@@ -95,7 +95,7 @@ ggplot(Belgien.age,aes(Altersgruppe, Faelle))+geom_bar(stat="identity",position 
 
 ##Schweden
 Schweden.age <- (Daten$sweden$sweden_6)
-ggplot(Schweden.age,aes(Altersgruppe, Fälle))+geom_bar(stat="identity",position = "dodge")
+ggplot(Schweden.age,aes(Altersgruppe, Fälle))+geom_bar(stat="identity",position = "dodge")+ggtitle("Sweden")
 
 ##Tschechien
 Czech.all.cases <- (Daten$czech$czech_6)
@@ -118,7 +118,7 @@ Czech.age <- data.frame(Altersgruppe = c("0-9","10-19","20-29","30-39","40-49","
                           Faelle = Czech.age.group)
 
 Czech.age
-ggplot(Czech.age,aes(Altersgruppe, Faelle))+geom_bar(stat="identity",position = "dodge")
+ggplot(Czech.age,aes(Altersgruppe, Faelle))+geom_bar(stat="identity",position = "dodge")+ggtitle("Czech")
 
 
 ##Bilden von Inzidenz Tabelle (Beispiele)
