@@ -12,7 +12,7 @@ install.packages("R6")
 install.packages("checkamte")
 install.packages("Rcpp")
 install.packages("scales")
-
+install.packages("plyr")
 
 # Load packages
 library("tidyverse")
@@ -26,3 +26,4 @@ library("R6")
 library("checkmate")
 library("Rcpp")
 library("scales")
+library("plyr")
