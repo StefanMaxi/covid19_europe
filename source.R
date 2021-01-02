@@ -125,8 +125,7 @@ translate.DE <- function(data) {
 
 transform.data <- function(Daten) {
   #Bavaria
-  Daten$bavaria$lgl$bavaria_lgl_days[, `:=`(Datum = as.Date(Datum, "%d.%m"), bay.Fälle = as.numeric(str_replace(as.character(bay.Fälle), "\\.", "")))]
-  
+  Daten$bavaria$lgl$bavaria_lgl_days[, `:=`(Datum = as.Date(Datum, "%d.%m.%Y"), bay.Fälle = as.numeric(str_replace(as.character(bay.Fälle), "\\.", "")))]
   
   #Belgium
   Daten$belgium$belgium_age.sex[, Datum := as.Date(Datum)]
