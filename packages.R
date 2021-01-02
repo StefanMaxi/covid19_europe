@@ -11,6 +11,7 @@ install.packages("data.table")
 install.packages("R6")
 install.packages("checkamte")
 install.packages("Rcpp")
+install.packages("scales")
 
 
 # Load packages
@@ -24,3 +25,4 @@ library("data.table")
 library("R6")
 library("checkmate")
 library("Rcpp")
+library("scales")
