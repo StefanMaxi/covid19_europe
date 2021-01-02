@@ -16,13 +16,15 @@ bayern.day.cases <- ggplot(data = cases.per.day, mapping = aes(x=Datum, y=Bayern
 bayern.day.cases + geom_line(colour="red")
 
 belgien.day.cases <- ggplot(data = cases.per.day, mapping = aes(x=Datum, y=Belgien))
-belgien.day.cases + geom_smooth(colour="blue")
+belgien.day.cases + geom_line(colour="blue")
 
 casesfourland <- ggplot() +
-  geom_smooth(data = cases.per.day, mapping = aes(x=Datum, y=Bayern), colour="red") +
-  geom_smooth(data = cases.per.day, mapping = aes(x=Datum, y=Belgien), colour="blue")+
-  geom_smooth(data = cases.per.day, mapping = aes(x=Datum, y=Schweden), colour="yellow")+
-  geom_smooth(data = cases.per.day, mapping = aes(x=Datum, y=Tschechien), colour="green")
+  geom_line(data = cases.per.day, mapping = aes(x=Datum, y=Bayern), colour="red", size = 1) +
+  geom_line(data = cases.per.day, mapping = aes(x=Datum, y=Belgien), colour="blue", size = 1)+
+  geom_line(data = cases.per.day, mapping = aes(x=Datum, y=Schweden), colour="yellow", size = 1)+
+  geom_line(data = cases.per.day, mapping = aes(x=Datum, y=Tschechien), colour="green", size = 1)+
+  ggtitle("Entwicklungen")+
+  xlab("Datum") + ylab("Neue Faelle")
 
 casesfourland
 
@@ -60,34 +62,26 @@ ggplot(Bayern.age,aes(Altersgruppe, Faelle))+geom_bar(stat="identity",position =
 belgien.age.sex <- (Daten$belgium$belgium_age.sex)
 belgien.age.sex
 
-belgien.0 <- subset(belgien.age.sex, Altersgruppe == "0-9")
-b.a.0 <- nrow(belgien.0)
-belgien.1 <- subset(belgien.age.sex, Altersgruppe == "10-19")
-b.a.1 <- nrow(belgien.1)
-belgien.2 <- subset(belgien.age.sex, Altersgruppe == "20-29")
-b.a.2 <- nrow(belgien.2)
-belgien.3 <- subset(belgien.age.sex, Altersgruppe == "30-39")
-b.a.3 <- nrow(belgien.3)
-belgien.4 <- subset(belgien.age.sex, Altersgruppe == "40-49")
-b.a.4 <- nrow(belgien.4)
-belgien.5 <- subset(belgien.age.sex, Altersgruppe == "50-59")
-b.a.5 <- nrow(belgien.5)
-belgien.6 <- subset(belgien.age.sex, Altersgruppe == "60-69")
-b.a.6 <- nrow(belgien.6)
-belgien.7 <- subset(belgien.age.sex, Altersgruppe == "70-79")
-b.a.7 <- nrow(belgien.7)
-belgien.8 <- subset(belgien.age.sex, Altersgruppe == "80-89")
-b.a.8 <- nrow(belgien.8)
-belgien.9 <- subset(belgien.age.sex, Altersgruppe == "90+")
-b.a.9 <- nrow(belgien.9)
+countingCasesBel <- function(dataset) {
+  agegroup <- c("0-9","10-19","20-29","30-39","40-49","50-59","60-69","70-79","80-89","90+")
+  groupCountingResult <- rep(0, 10)
+  counter <- c(1:10)
+  for (x in counter) {
+    groupCountingResult[x] <- sum((subset(dataset, Altersgruppe == agegroup[x]))$bel.Fälle)
+  }
+  return(groupCountingResult)
+}
+
+resultBelAge <- countingCasesBel(belgien.age.sex)
+
 b.a.na <- subset(belgien.age.sex, is.na(Altersgruppe))
 b.a.10 <- nrow(b.a.na)
-
+resultBelAge <- append(resultBelAge, b.a.10)
 Belgien.age <- data.frame(Altersgruppe = c("0-9","10-19","20-29","30-39","40-49","50-59","60-69","70-79","80-89","90+", "unbekannt"),
-                          Faelle = c(b.a.0, b.a.1, b.a.2, b.a.3, b.a.4, b.a.5, b.a.6, b.a.7, b.a.8, b.a.9, b.a.10))
+                          resultBelAge)
 
 Belgien.age
-ggplot(Belgien.age,aes(Altersgruppe, Faelle))+geom_bar(stat="identity",position = "dodge")+ggtitle("Belgien")
+ggplot(Belgien.age,aes(Altersgruppe, resultBelAge))+geom_bar(stat="identity",position = "dodge")+ggtitle("Belgien")+ ylab("Faelle")
 
 #if sex neet to be seperated
 #belgien.0.9.f <- nrow(subset(belgien.0.9,Geschlecht == "F"))
@@ -120,6 +114,49 @@ Czech.age <- data.frame(Altersgruppe = c("0-9","10-19","20-29","30-39","40-49","
 Czech.age
 ggplot(Czech.age,aes(Altersgruppe, Faelle))+geom_bar(stat="identity",position = "dodge")+ggtitle("Czech")
 
+##Kernwerte
+#Geschlecht Anteil 
+#Bayern
+bayernGeschlechtW <- sum(bayern.age.and.sex$weiblich) / (sum(bayern.age.and.sex$maennlich) + sum(bayern.age.and.sex$weiblich))
+bayernGeschlechtM <- sum(bayern.age.and.sex$maennlich) / (sum(bayern.age.and.sex$maennlich) + sum(bayern.age.and.sex$weiblich))
+bayernW <- label_percent()(bayernGeschlechtW) #51%
+bayernM <- label_percent()(bayernGeschlechtM) #49%
+
+#Belgien
+belgienW <- sum(subset(belgien.age.sex, Geschlecht == "F")$bel.Fälle)
+belgienM <- sum(subset(belgien.age.sex, Geschlecht == "M")$bel.Fälle)
+percBelW <- label_percent()(belgienW / (belgienW + belgienM)) #55%
+percBelM <- label_percent()(belgienM / (belgienW + belgienM)) #45%
+
+#Sweden
+swedenGeschlecht <- (Daten$sweden$sweden_5)
+swedenW <- swedenGeschlecht[[2,2]]
+swedenM <- swedenGeschlecht[[1,2]]
+percSweM <- label_percent()(swedenM / (swedenM + swedenW)) #47%
+percSweW <- label_percent()(swedenW / (swedenM + swedenW)) #53%
+
+#Czech
+czechW <- nrow(subset(Czech.all.cases, Geschlecht == "Z"))
+czechM <- nrow(subset(Czech.all.cases, Geschlecht == "M"))
+percCzeW <- label_percent()(czechW / (czechW + czechM)) #52%
+percCzeM <- label_percent()(czechM / (czechW + czechM)) #48%
+
+#Vergleich
+mat_sex <- matrix(
+  c(bayernM, percBelM, percSweM, percCzeM, 
+    bayernW, percBelW, percSweW, percCzeW),
+  nrow=4, ncol=2,
+  dimnames = list(c("Bayern", "Belgien", "Sweden", "Czech"), c("Male", "Female"))
+)
+knitr::kable(mat_sex)
+d_sex <- as.data.frame(as.table(mat_sex))
+names(d_sex) <- c("Land", "Geschlecht", "Anteil")
+knitr::kable(d_sex)
+
+p <- ggplot(data = d_sex, mapping = aes(
+  x = `Land`, fill = `Geschlecht`, y = `Anteil`
+))
+p + geom_col() + geom_hline(aes(yintercept=4.5),colour="red",linetype="dashed")
 
 ##Bilden von Inzidenz Tabelle (Beispiele)
 incidence30 <- daily.incedence(Daten, end = "2020-11-14", intervall = 30, relative = FALSE)
