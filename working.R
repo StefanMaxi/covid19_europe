@@ -164,6 +164,8 @@ View(incidence30)
 
 incidence7 <- daily.incedence(Daten, end = "2020-12-30", intervall = 7, relative = FALSE)
 View(incidence7)
+incidence7proEinwohner <- daily.incedence(Daten, end = "2020-12-30", intervall = 7, relative = TRUE)
+View(incidence7proEinwohner)
 
 #incidencefourland
 mytheme <- theme(plot.title = element_text(size="20",color="brown",face = "bold"),
@@ -172,9 +174,8 @@ mytheme <- theme(plot.title = element_text(size="20",color="brown",face = "bold"
                  legend.position = "top",
                  #scale_color_manual(name = "Land", values=c("Bayern"="red", "Belgien"="blue", "Schweden"="green","Tschechien"="yellow")) ,
                  #scale_linetype_manual(name = "Land", values=c("Bayern"=2, "Belgien"=1, "Schweden"=9,"Tschechien"=2))
-                 
-)
-incidencefourland <- ggplot(data = incidence7, show.legend=TRUE)+ggtitle("das Inzidenz in einer Woche")+xlab("Pro Woche")+ylab("Inzidenz pro Woche")+
+    )
+incidencefourland <- ggplot(data = incidence7, show.legend=TRUE)+ggtitle("Faelle pro Woche")+xlab("Meldewoche")+ylab("Faelle")+
   geom_line(aes(x=Datum,y=Bayern),colour="orange",show.legend =TRUE)+
   geom_line(aes(x=Datum,y=Belgien),colour="sky blue",show.legend =TRUE)+
   geom_line(aes(x=Datum,y=Schweden),colour="green",show.legend =TRUE)+
@@ -185,13 +186,23 @@ incidencefourland <- ggplot(data = incidence7, show.legend=TRUE)+ggtitle("das In
                         breaks=c("Bayern","Belgien","Schweden","Tschechien"),
                         labels=c("Bayern","Belgien","Schweden","Tschechien"))+
   geom_hline(aes(yintercept=110000),colour="red",linetype="dashed")+
-  
   mytheme
-
-
-
 incidencefourland
 
+
+incidencefourland2 <- ggplot(data = incidence7proEinwohner, show.legend=TRUE)+ggtitle("7-Tage-Inzidenz pro 100.000 Einwohner")+xlab("Meldewoche")+ylab("Faelle pro 100.000 Einwohner")+
+  geom_line(aes(x=Datum,y=Bayern),colour="orange",show.legend =TRUE)+
+  geom_line(aes(x=Datum,y=Belgien),colour="sky blue",show.legend =TRUE)+
+  geom_line(aes(x=Datum,y=Schweden),colour="green",show.legend =TRUE)+
+  geom_line(aes(x=Datum,y=Tschechien),colour="pink",show.legend =TRUE)+
+  scale_x_date(date_breaks = "1 week")+
+  scale_y_continuous(breaks=c(100,200,300,400,500,600,700,800,900,1000))+
+  scale_colour_discrete(name="Land",
+                        breaks=c("Bayern","Belgien","Schweden","Tschechien"),
+                        labels=c("Bayern","Belgien","Schweden","Tschechien"))+
+  geom_hline(aes(yintercept=100),colour="red",linetype="dashed")+
+  mytheme
+incidencefourland2
 
 incidence3 <- daily.incedence(Daten, end = "2020-11-14", intervall = 3, relative = FALSE)
 View(incidence3)
