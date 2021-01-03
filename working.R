@@ -398,7 +398,7 @@ knitr::kable(d_sex)
 p <- ggplot(data = d_sex, mapping = aes(
   x = `Land`, fill = `Geschlecht`, y = `Anteil`
 ))
-p + geom_col() + geom_hline(aes(yintercept=3.9),colour="red",linetype="dashed")+
+p + geom_col() + geom_hline(aes(yintercept=3.5),colour="red",linetype="dashed")+
   ggtitle("Anteil nach Geschleht Todeszahl")+
   theme(axis.text.x = element_text(angle = 0,hjust = 0.5,vjust = 1,colour = "black",size = "16"),
         plot.title = element_text(size="20",lineheight =.6,face = "bold",colour = "brown"),
