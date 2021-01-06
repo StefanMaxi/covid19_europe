@@ -419,7 +419,7 @@ p + geom_col() + geom_hline(aes(yintercept=3.5),colour="red",linetype="dashed")+
         axis.title.y = element_text(colour = "brown",size = "20"),
         axis.text.y = element_text(angle=0, hjust=1,vjust=1, size=10,colour = "black"))
 
-# TodesZahl pro Tag
+# TodesZahl Matrix
 Data1<-(Daten$bavaria$rki$bavaria_rki)
 sub <- subset(Data1,Bundesland=="Bayern")
 Data2 <- (Daten$belgium$belgium_mortality)
