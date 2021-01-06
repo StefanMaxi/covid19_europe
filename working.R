@@ -262,7 +262,8 @@ ggplot(data=Data2,aes(x=Geschlecht,y=Todesfälle))+
         axis.text.y = element_text(angle=0, vjust=0.5, size=10,colour = "black"))
 
 #Todesfall in Belgium pro Tag
-ggplot(data = Data2,aes(as.Date(Datum),Todesfälle))+
+countsub.bel <- count(Data2$Datum)
+ggplot(data = countsub.bel,aes(as.Date(x),freq))+
   geom_bar(stat="identity",fill="purple")+
   theme(axis.text.x = element_text(angle = 45,hjust = 1,vjust = 1,colour = "black"),
         plot.title = element_text(size="20",lineheight =.6,face = "bold",colour = "brown"),
@@ -270,7 +271,7 @@ ggplot(data = Data2,aes(as.Date(Datum),Todesfälle))+
         axis.title.y = element_text(colour = "brown",size = "16"),
         axis.text.y = element_text(angle=0, vjust=0.5, size=10,colour = "black"))+
   scale_x_date(date_breaks = "1 weeks")+
-  scale_y_continuous(breaks=c(0,50,100,150,200,250,300,350,400,450,500),expand = c(0,0))+
+  scale_y_continuous(expand = c(0,0))+
   xlab("Date")+ylab("AnzahlTodesfall")+ggtitle("Todeszahl pro Tag in Belgium")
 
 mean(Data2$Todesfälle)
@@ -421,29 +422,31 @@ p + geom_col() + geom_hline(aes(yintercept=3.5),colour="red",linetype="dashed")+
 
 # TodesZahl Matrix
 Data1<-(Daten$bavaria$rki$bavaria_rki)
-sub <- subset(Data1,Bundesland=="Bayern")
+sub <- subset(Data1,(Bundesland=="Bayern"&&AnzahlTodesfall= 0))
 Data2 <- (Daten$belgium$belgium_mortality)
 Data3 <- (Daten$czech$czech_9)
 Data03<- (Daten$czech$czech_1)
 Data04 <- read.csv("data/sweden/Schweden02.csv")
 
-mean.bay<-mean(sub$AnzahlTodesfall)
-sum.bay<-sum(sub$AnzahlTodesfall)
-max.bay<-max(sub$AnzahlTodesfall)
-aaa01<-subset(sub,Meldedatum<="2020/07/27")
-aaa02<-subset(sub,Meldedatum>="2020/07/27")
-max.bay01<-max(aaa01$AnzahlTodesfall)
-max.bay02<-max(aaa02$AnzahlTodesfall)
+#Bayern
+countsub.bay <- count(sub)
+sum.bay<-sum(countsub.bay$freq)
+max.bay<-max(countsub.bay$freq)
+aaa01<-subset(countsub.bay,x<="2020/07/27")
+aaa02<-subset(countsub.bay,x>="2020/07/27")
+max.bay01<-max(aaa01$freq)
+max.bay02<-max(aaa02$freq)
 
-mean.bel<-mean(Data2$Todesfälle)
-sum.bel<-sum(Data2$Todesfälle)
-max.bel<-max(Data2$Todesfälle)
-bbb01<- subset(Data2,Datum <= "2020-07-06")
-bbb02<- subset(Data2,Datum >= "2020-07-06")
-max.bel01<-max(bbb01$Todesfälle)
-max.bel02<-max(bbb02$Todesfälle)
+#Belgien
+countsub.bel <- count(Data2$Datum)
+sum.bel<-sum(countsub.bel$freq)
+max.bel<-max(countsub.bel$freq)
+bbb01<- subset(countsub.bel,x <= "2020-07-06")
+bbb02<- subset(countsub.bel,x >= "2020-07-06")
+max.bel01<-max(bbb01$freq)
+max.bel02<-max(bbb02$freq)
 
-mean.cze<-mean(Data03$Gesamttodeszahl)
+#Tschechien
 countsub<-count(Data3$Datum)
 sum.cze<-sum(countsub$freq)
 max.cze<-max(countsub$freq)
@@ -452,7 +455,7 @@ ccc02<- subset(count(Data3$Datum),x>="2020-07-06")
 max.cze01<-max(ccc01$freq)
 max.cze02<-max(ccc02$freq)
 
-mean.sch<-mean(Data04$Todesfall)
+#Schweden
 sum.sch<-sum(Data04$Todesfall)
 max.sch<-max(Data04$Todesfall)
 ddd01<- subset(Data04,Datum<="2020-08-31")
@@ -463,13 +466,12 @@ max.sch02<-max(ddd02$Todesfall)
 
 
 mat_sex <- matrix(
-  c(mean.bay,mean.bel,mean.cze,mean.sch,
-    sum.bay,sum.bel,sum.cze,sum.sch,
+  c(sum.bay,sum.bel,sum.cze,sum.sch,
     max.bay,max.bel,max.cze,max.sch,
     max.bay01,max.bel01,max.cze01,max.sch01,
     max.bay02,max.bel02,max.cze02,max.sch02),
-  nrow=4, ncol=5,
-  dimnames = list(c("Bayern", "Belgien", "Tschechien", "Sweden"), c("arith.Mean pro Tag","Sum der Todesfallzahl","Maximum Todesfallzahl","Maximum.1.Welle","Maximum.2.Welle"))
+  nrow=4, ncol=4,
+  dimnames = list(c("Bayern", "Belgien", "Tschechien", "Schweden"), c("Sum der Todesfallzahl","Maximum Todesfallzahl","Maximum.1.Welle","Maximum.2.Welle"))
 )
 knitr::kable(mat_sex)
 
