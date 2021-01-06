@@ -18,13 +18,18 @@ bayern.day.cases + geom_line(colour="red")
 belgien.day.cases <- ggplot(data = cases.per.day, mapping = aes(x=Datum, y=Belgien))
 belgien.day.cases + geom_line(colour="blue")
 
-casesfourland <- ggplot() +
-  geom_line(data = cases.per.day, mapping = aes(x=Datum, y=Bayern), colour="red", size = 1) +
-  geom_line(data = cases.per.day, mapping = aes(x=Datum, y=Belgien), colour="blue", size = 1)+
-  geom_line(data = cases.per.day, mapping = aes(x=Datum, y=Schweden), colour="yellow", size = 1)+
-  geom_line(data = cases.per.day, mapping = aes(x=Datum, y=Tschechien), colour="green", size = 1)+
-  ggtitle("Entwicklungen")+
-  xlab("Datum") + ylab("Neue Faelle")
+#Infektion pro Tag
+casesfourland <- ggplot(show.legend=TRUE) +
+  geom_line(data = cases.per.day, mapping = aes(x=Datum, y=Bayern), colour="red", size = 0.5,show.legend = TRUE) +
+  geom_line(data = cases.per.day, mapping = aes(x=Datum, y=Belgien), colour="blue", size = 0.5,show.legend = TRUE)+
+  geom_line(data = cases.per.day, mapping = aes(x=Datum, y=Schweden), colour="yellow", size = 0.5,show.legend = TRUE)+
+  geom_line(data = cases.per.day, mapping = aes(x=Datum, y=Tschechien), colour="green", size = 0.5,show.legend = TRUE)+
+  ggtitle("Infektionsentwicklungen pro Tag in vier Länder")+
+  scale_x_date(date_breaks = "1 week")+
+  theme(plot.title = element_text(size="20",color="brown",face = "bold"),
+        axis.text.x = element_text(angle = 45,hjust = 0.5,vjust = 0.5))+
+  xlab("Datum") + ylab("Neue Faelle")+
+  geom_hline(aes(yintercept=15000),colour="red",linetype="dashed")
 
 casesfourland
 
@@ -191,10 +196,10 @@ incidencefourland
 
 
 incidencefourland2 <- ggplot(data = incidence7proEinwohner, show.legend=TRUE)+ggtitle("7-Tage-Inzidenz pro 100.000 Einwohner")+xlab("Meldewoche")+ylab("Faelle pro 100.000 Einwohner")+
-  geom_line(aes(x=Datum,y=Bayern),colour="orange",show.legend =TRUE)+
-  geom_line(aes(x=Datum,y=Belgien),colour="sky blue",show.legend =TRUE)+
-  geom_line(aes(x=Datum,y=Schweden),colour="green",show.legend =TRUE)+
-  geom_line(aes(x=Datum,y=Tschechien),colour="pink",show.legend =TRUE)+
+  geom_line(aes(x=Datum,y=Bayern),colour="red",show.legend =TRUE)+
+  geom_line(aes(x=Datum,y=Belgien),colour="blue",show.legend =TRUE)+
+  geom_line(aes(x=Datum,y=Schweden),colour="yellow",show.legend =TRUE)+
+  geom_line(aes(x=Datum,y=Tschechien),colour="green",show.legend =TRUE)+
   scale_x_date(date_breaks = "1 week")+
   scale_y_continuous(breaks=c(100,200,300,400,500,600,700,800,900,1000))+
   scale_colour_discrete(name="Land",
