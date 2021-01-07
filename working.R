@@ -243,12 +243,6 @@ ggplot(data = sub,aes(as.Date(Meldedatum),AnzahlTodesfall))+
   scale_y_continuous(breaks=c(0,50,100,150,200,250,300,350,400,450,500),expand = c(0,0))+
   xlab("Date")+ylab("AnzahlTodesfall")+ggtitle("Todeszahl pro Tag in Bayern")
 
-max(sub$AnzahlTodesfall)
-aaa <-subset(sub,Meldedatum<="2020/06/14")
-max(aaa$AnzahlTodesfall)
-mean(aaa$AnzahlTodesfall)
-mean(sub$AnzahlTodesfall,Meldedatum >= "2020/06/14")
-
 #Belgium
 Data2 <- (Daten$belgium$belgium_mortality)
 ggplot(data=Data2,aes(x=Geschlecht,y=Todesfälle))+
@@ -273,11 +267,6 @@ ggplot(data = countsub.bel,aes(as.Date(x),freq))+
   scale_x_date(date_breaks = "1 weeks")+
   scale_y_continuous(expand = c(0,0))+
   xlab("Date")+ylab("AnzahlTodesfall")+ggtitle("Todeszahl pro Tag in Belgium")
-
-mean(Data2$Todesfälle)
-bbb <- subset(Data2,Datum >= "2020-07-06")
-max(bbb$Todesfälle)
-mean(bbb$Todesfälle)
 
 #Tschechien
 Data3 <- (Daten$czech$czech_9)
@@ -305,10 +294,6 @@ ggplot(data = Data3,aes(x=as.Date(Datum)))+
   scale_y_continuous(breaks=c(0,50,100,150,200,250,300,350,400,450,500),expand = c(0,0))+
   xlab("Date")+ylab("AnzahlTodesfall")+ggtitle("Todeszahl pro Tag in Tschechien")
 
-ccc<- subset(count(Data3$Datum),x>="2020-06-01")
-count(Data3$Geschlecht)
-max(ccc$freq)
-mean(ccc$freq)
 
 #Schweden
 Data4 <- (Daten$sweden$sweden_5)
@@ -422,17 +407,20 @@ p + geom_col() + geom_hline(aes(yintercept=3.5),colour="red",linetype="dashed")+
 
 # TodesZahl Matrix
 Data1<-(Daten$bavaria$rki$bavaria_rki)
-sub <- subset(Data1,(Bundesland=="Bayern" & AnzahlTodesfall!= 0))
-sub2 <- sub %>% select(AnzahlTodesfall,Meldedatum)
+sub1<- subset(Data1,(Bundesland=="Bayern" & AnzahlTodesfall!= 0))
+sub01 <- sub1 %>% select(AnzahlTodesfall,Meldedatum)
 Data2 <- (Daten$belgium$belgium_mortality)
+sub02 <- Data2 %>% select(Datum,Todesfälle)
 Data3 <- (Daten$czech$czech_9)
 Data03<- (Daten$czech$czech_1)
+sub3 <- subset(Data03,Gesamttodeszahl != 0)
+sub03 <- sub3 %>% select(Datum,Gesamttodeszahl)
 Data04 <- read.csv("data/sweden/Schweden02.csv")
 
 #Bayern
-countsub.bay <- count(sub, var='AnzahlTodesfall')
-sum.bay<-sum(sub$AnzahlTodesfall)
-deadDayilyBayern <- sub2 %>% count('Meldedatum')
+countsub.bay <- count(sub1, var='AnzahlTodesfall')
+sum.bay<-sum(sub1$AnzahlTodesfall)
+deadDayilyBayern <- sub01 %>% count('Meldedatum')
 
 max.bay<-max(deadDayilyBayern$freq) #116
 aaa01<-subset(deadDayilyBayern,Meldedatum<="2020/07/27")
@@ -441,20 +429,26 @@ max.bay01<-max(aaa01$freq)
 max.bay02<-max(aaa02$freq)
 
 #Belgien
-countsub.bel <- count(Data2$Datum)
-sum.bel<-sum(countsub.bel$freq)
-max.bel<-max(countsub.bel$freq)
-bbb01<- subset(countsub.bel,x <= "2020-07-06")
-bbb02<- subset(countsub.bel,x >= "2020-07-06")
-max.bel01<-max(bbb01$freq)
-max.bel02<-max(bbb02$freq)
+countsub.bel <- count(Data2,var='Todesfälle')
+sum.bel<-sum(Data2$Todesfälle)
+deadDailyBelgien<- sub02 %>% count("Datum")
+deadDailyBelgien
+
+max.bel<-max(countsub.bel$Todesfälle)
+bbb01<- subset(Data2,Datum <= "2020-07-06")
+bbb02<- subset(Data2,Datum >= "2020-07-06")
+countsub.bel01 <- count(bbb01,var='Todesfälle')
+countsub.bel02 <- count(bbb02,var='Todesfälle')
+max.bel01<-max(countsub.bel01$Todesfälle)
+max.bel02<-max(countsub.bel02$Todesfälle)
 
 #Tschechien
-countsub<-count(Data3$Datum)
-sum.cze<-sum(countsub$freq)
-max.cze<-max(countsub$freq)
-ccc01<- subset(count(Data3$Datum),x<="2020-07-06")
-ccc02<- subset(count(Data3$Datum),x>="2020-07-06")
+countsub.cze <-count(Data3,var="Datum")
+sum.cze<-sum(countsub.cze$freq)
+
+max.cze<-max(countsub.cze$freq)
+ccc01<- subset(countsub.cze,Datum<="2020-07-06")
+ccc02<- subset(countsub.cze,Datum>="2020-07-06")
 max.cze01<-max(ccc01$freq)
 max.cze02<-max(ccc02$freq)
 
