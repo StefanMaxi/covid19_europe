@@ -422,18 +422,21 @@ p + geom_col() + geom_hline(aes(yintercept=3.5),colour="red",linetype="dashed")+
 
 # TodesZahl Matrix
 Data1<-(Daten$bavaria$rki$bavaria_rki)
-sub <- subset(Data1,(Bundesland=="Bayern"&&AnzahlTodesfall= 0))
+sub <- subset(Data1,(Bundesland=="Bayern" & AnzahlTodesfall!= 0))
+sub2 <- sub %>% select(AnzahlTodesfall,Meldedatum)
 Data2 <- (Daten$belgium$belgium_mortality)
 Data3 <- (Daten$czech$czech_9)
 Data03<- (Daten$czech$czech_1)
 Data04 <- read.csv("data/sweden/Schweden02.csv")
 
 #Bayern
-countsub.bay <- count(sub)
-sum.bay<-sum(countsub.bay$freq)
-max.bay<-max(countsub.bay$freq)
-aaa01<-subset(countsub.bay,x<="2020/07/27")
-aaa02<-subset(countsub.bay,x>="2020/07/27")
+countsub.bay <- count(sub, var='AnzahlTodesfall')
+sum.bay<-sum(sub$AnzahlTodesfall)
+deadDayilyBayern <- sub2 %>% count('Meldedatum')
+
+max.bay<-max(deadDayilyBayern$freq) #116
+aaa01<-subset(deadDayilyBayern,Meldedatum<="2020/07/27")
+aaa02<-subset(deadDayilyBayern,Meldedatum>="2020/07/27")
 max.bay01<-max(aaa01$freq)
 max.bay02<-max(aaa02$freq)
 
