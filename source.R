@@ -1,16 +1,16 @@
-#17.11.2020
+#04.01.2021
 update.data <- function() { 
   #BAVARIA
   
-  bavaria_lgl_overview  <- as.data.table(read.csv("data/bavaria/lgl/tabelle_01_20201221.csv", skip = 1, sep = ";", encoding="UTF-8"))
-  bavaria_lgl_change    <- as.data.table(read.csv("data/bavaria/lgl/tabelle_02_20201221.csv", skip = 1, sep = ";", encoding="UTF-8"))
-  bavaria_lgl_regions   <- as.data.table(read.csv("data/bavaria/lgl/tabelle_03_20201221.csv", skip = 1, sep = ";", encoding="UTF-8"))
-  bavaria_lgl_countys   <- as.data.table(read.csv("data/bavaria/lgl/tabelle_04_20201221.csv", skip = 1, sep = ";", encoding="UTF-8"))
-  bavaria_lgl_days      <- as.data.table(read.csv("data/bavaria/lgl/tabelle_05_20201221.csv", skip = 1, sep = ";", encoding="UTF-8", dec = "."))
-  bavaria_lgl_weeks1    <- as.data.table(read.csv("data/bavaria/lgl/tabelle_06_20201221.csv", skip = 1, sep = ";", encoding="UTF-8"))
-  bavaria_lgl_age       <- as.data.table(read.csv("data/bavaria/lgl/tabelle_07_20201221.csv", skip = 1, sep = ";", encoding="UTF-8"))
-  bavaria_lgl_weeks2    <- as.data.table(read.csv("data/bavaria/lgl/tabelle_08_20201221.csv", skip = 1, sep = ";", encoding="UTF-8"))
-  bavaria_lgl_tests     <- as.data.table(read.csv("data/bavaria/lgl/tabelle_09_20201221.csv", skip = 1, sep = ";", encoding="UTF-8"))
+  bavaria_lgl_overview  <- as.data.table(read.csv("data/bavaria/lgl/tabelle_01_2021-01-04.csv", skip = 1, sep = ";", encoding="UTF-8"))
+  bavaria_lgl_change    <- as.data.table(read.csv("data/bavaria/lgl/tabelle_02_2021-01-04.csv", skip = 1, sep = ";", encoding="UTF-8"))
+  bavaria_lgl_regions   <- as.data.table(read.csv("data/bavaria/lgl/tabelle_03_2021-01-04.csv", skip = 1, sep = ";", encoding="UTF-8"))
+  bavaria_lgl_countys   <- as.data.table(read.csv("data/bavaria/lgl/tabelle_04_2021-01-04.csv", skip = 1, sep = ";", encoding="UTF-8"))
+  bavaria_lgl_days      <- as.data.table(read.csv("data/bavaria/lgl/tabelle_05_2021-01-04.csv", skip = 1, sep = ";", encoding="UTF-8", dec = "."))
+  bavaria_lgl_weeks1    <- as.data.table(read.csv("data/bavaria/lgl/tabelle_06_2021-01-04.csv", skip = 1, sep = ";", encoding="UTF-8"))
+  bavaria_lgl_age       <- as.data.table(read.csv("data/bavaria/lgl/tabelle_07_2021-01-04.csv", skip = 1, sep = ";", encoding="UTF-8"))
+  bavaria_lgl_weeks2    <- as.data.table(read.csv("data/bavaria/lgl/tabelle_08_2021-01-04.csv", skip = 1, sep = ";", encoding="UTF-8"))
+  bavaria_lgl_tests     <- as.data.table(read.csv("data/bavaria/lgl/tabelle_09_2021-01-04.csv", skip = 1, sep = ";", encoding="UTF-8"))
   
   lgl <- list(bavaria_lgl_overview, bavaria_lgl_change, bavaria_lgl_regions, bavaria_lgl_countys, bavaria_lgl_days,
               bavaria_lgl_weeks1, bavaria_lgl_age, bavaria_lgl_weeks2, bavaria_lgl_tests)
@@ -37,22 +37,17 @@ update.data <- function() {
   
   #CZECH
   czech_1        <- as.data.table(read.csv("data/czech/kraj-okres-nakazeni-vyleceni-umrti.csv", fileEncoding="UTF-8-BOM"))
-  czech_2        <- as.data.table(read.csv("data/czech/mestske-casti.csv", sep = ";", fileEncoding="UTF-8-BOM"))
   czech_3        <- as.data.table(read.csv("data/czech/nakaza.csv", fileEncoding="UTF-8-BOM"))
   czech_4        <- as.data.table(read.csv("data/czech/nakazeni-vyleceni-umrti-testy.csv", fileEncoding="UTF-8-BOM"))
-  czech_5        <- as.data.table(read.csv("data/czech/obec.csv", sep = ";", fileEncoding="UTF-8-BOM"))
   czech_6        <- as.data.table(read.csv("data/czech/osoby.csv", fileEncoding="UTF-8-BOM"))
   czech_7        <- as.data.table(read.csv("data/czech/pomucky.csv", fileEncoding="UTF-8-BOM"))
   czech_8        <- as.data.table(read.csv("data/czech/testy.csv", fileEncoding="UTF-8-BOM"))
   czech_9        <- as.data.table(read.csv("data/czech/umrti.csv", fileEncoding="UTF-8-BOM"))
-  czech_10       <- as.data.table(read.csv("data/czech/vyleceni.csv", fileEncoding="UTF-8-BOM"))
-  czech_11       <- as.data.table(read.csv("data/czech/web_orp_2020-11-17-01-00-29.csv", sep = ";", fileEncoding="UTF-8-BOM"))
-  czech_12       <- as.data.table(read.csv("data/czech/zakladni-prehled.csv", fileEncoding="UTF-8-BOM"))
   
-  czech <- list(czech_1, czech_2, czech_3, czech_4, czech_5, czech_6, czech_7, czech_8, czech_9, 
-                czech_10, czech_11, czech_12)
-  names(czech) <- c("czech_1", "czech_2", "czech_3", "czech_4", "czech_5", "czech_6", "czech_7", "czech_8", "czech_9", 
-                    "czech_10", "czech_11", "czech_12")
+  czech <- list(czech_1, czech_3, czech_4, czech_6, czech_7, czech_8, czech_9) 
+  
+  names(czech) <- c("czech_1", "czech_3", "czech_4", "czech_6", "czech_7", "czech_8", "czech_9")
+  
   #SWEDEN
   sweden_1 <- as.data.table(read_excel("data/sweden/Folkhalsomyndigheten_Covid19.xlsx", sheet = 1))
   sweden_2 <- as.data.table(read_excel("data/sweden/Folkhalsomyndigheten_Covid19.xlsx", sheet = 2))
@@ -78,7 +73,7 @@ translate.DE <- function(data) {
   names(Daten$bavaria$lgl$bavaria_lgl_regions) <- c("Regierungsbezirk", "Anzahl.der.Fälle", "Fälle.Änderung.zum.Vortag", "Fallzahl.pro.100.000.Einwohner", "Fälle.der.letzten.7.Tage", "X7.Tage.Inzidenz.pro.100.000.Einwohner", "Anzahl.der.Todesfälle", "Todesfälle.Änderung.zum.Vortag")
   names(Daten$bavaria$lgl$bavaria_lgl_county) <- c("Landkreis.Stadt", "Anzahl.der.Fälle", "Fälle.Änderung.zum.Vortag", "Fallzahl.pro.100.000.Einwohner", "Fälle.der.letzten.7.Tage", "X7.Tage.Inzidenz.pro.100.000.Einwohner", "Anzahl.der.Todesfälle", "Todesfälle.Änderung.zum.Vortag")
   names(Daten$bavaria$lgl$bavaria_lgl_days) <- c("Datum", "Vortag.bekannt", "Heute.bekannt", "bay.Fälle")
-  names(Daten$bavaria$lgl$bavaria_lgl_weeks1) <- c("Kalenderwoche", "Altersgruppe", "Inzidenz", "Fälle")
+  names(Daten$bavaria$lgl$bavaria_lgl_weeks1) <- c("Jahr","Kalenderwoche", "Altersgruppe", "Inzidenz", "Fälle")
   names(Daten$bavaria$lgl$bavaria_lgl_age) <- c("Altersgruppe", "weiblich", "maennlich", "unbekannt")
   names(Daten$bavaria$lgl$bavaria_lgl_weeks2) <- c("Kalenderwoche", "Altersgruppe", "Inzidenz", "Fälle")
   names(Daten$bavaria$lgl$bavaria_lgl_tests) <- c("Datum", "Tests", "positiv", "negativ", "Positivrate")
@@ -94,18 +89,13 @@ translate.DE <- function(data) {
   
   #Tschechien
   names(Daten$czech$czech_1) <- c("Datum", "Bundesland", "Landkreis", "Gesamtfallzahl", "Gesamtgeheiltenzahl", "Gesamttodeszahl") ## Gliederung Tschechien 
-  names(Daten$czech$czech_2) <- c("Wochentag","Datum","Bundesland","BundeslandName","Landkreis","LandkreisName","Postleitzahl","PLZName","Distrikt","DistriktName","MCCode","Neuerfälle","AktuellefälleZahl")
   names(Daten$czech$czech_3) <- c("Datum", "tsc.Fälle", "Gesamtfallzahl")
   names(Daten$czech$czech_4) <- c("Datum","Gesamtfallzahl","Gesamtgeheiltenzahl","Gesamttodeszahl","Gesamttestzahl")
-  names(Daten$czech$czech_5) <- c("Wochentag","Datum","Bundesland","BundeslandName","Landkreis","LandkreisName","Postleitzahl","PLZName","Distrikt","DistriktName","Gemeinde","GemeindeName","Neuerfälle","Aktuellelfälle")
   names(Daten$czech$czech_6) <- c("Datum","Alter","Geschlecht","Bundesland","Landkreis","AuslandInfektionZahl","AuslandCode")
   names(Daten$czech$czech_7) <- c("HilfeProdukt","Bundesland","GesamtMenge")
   names(Daten$czech$czech_8) <- c("Datum","tsc.Testzahl","GesamtfälleAnzahl_Test","tsc.Anzahl_1stTest","GesamfälleAnzahl_1stTest")
   names(Daten$czech$czech_9) <- c("Datum","Alter","Geschlecht","Bundesland","Landkreis")
-  names(Daten$czech$czech_10) <- c("Datum","Alter","Geschlecht","Bundesland","Landkreis")
-  names(Daten$czech$czech_11) <- c("Wochentag","Datum","Postleitzahl","PLZName","Inzidenz_7","Inzidenz_65_7","Inzidenz_75_7","Häufigkeit","Häufigkeit_65","Häufigkeit_75","Aktuelle_Krankenhauspatient","Neuezahl_Krankenhauspatient_7","Testzahl_7")
-  names(Daten$czech$czech_12) <- c("Datum","GesamtTest","Insgesamtfälle","Aktuellefälle","AnzahlGenesen","Todesfälle","Aktuelle_KrankenhausPatient","AnzhalTest_Gestern","Anzahlfälle_Gestern","Anzahlfälle_Heute","GesternDatum","Insgesamtfallzahl_Datum_Gestern","Insgesamtfallzahl_Datum_Heute")
- 
+  
   #Schweden
   names(Daten$sweden$sweden_1) <- c("Datum", "swe.Fälle", "Blekinge", "Dalarna", "Gotland", "Gävleborg", "Halland", "Jämtland_Härjedalen", "Jönköping",
                                     "Kalmar", "Kronoberg", "Norrbotten", "Skåne", "Stockholm", "Sörmland", "Uppsala", "Värmland", "Västerbotten", "Västernorrland",
