@@ -44,9 +44,9 @@ View(cases.per.day.relative1)
 #Bayern Altesgruppe
 bayern.age.and.sex <- (Daten$bavaria$lgl$bavaria_lgl_age)
 #data correction
-bayern.age.and.sex$weiblich <- replace(bayern.age.and.sex$weiblich, c(1:9), bayern.age.and.sex$weiblich*1000)
-bayern.age.and.sex$maennlich <- replace(bayern.age.and.sex$maennlich, c(1:9), bayern.age.and.sex$maennlich*1000)
-bayern.age.and.sex$unbekannt <- replace(bayern.age.and.sex$unbekannt, c(12), bayern.age.and.sex$unbekannt*1000)
+bayern.age.and.sex$weiblich <- replace(bayern.age.and.sex$weiblich, c(1:10), bayern.age.and.sex$weiblich*1000)
+bayern.age.and.sex$maennlich <- replace(bayern.age.and.sex$maennlich, c(1:10), bayern.age.and.sex$maennlich*1000)
+#ignore the unknown: bayern.age.and.sex$unbekannt <- replace(bayern.age.and.sex$unbekannt, c(12), bayern.age.and.sex$unbekannt*1000)
 bayern.age.and.sex %>% mutate_if(is.numeric, ~round(.))
 bayern.age.and.sex <- head(bayern.age.and.sex,-1)
 
@@ -151,17 +151,24 @@ mat_sex <- matrix(
   c(bayernM, percBelM, percSweM, percCzeM, 
     bayernW, percBelW, percSweW, percCzeW),
   nrow=4, ncol=2,
-  dimnames = list(c("Bayern", "Belgien", "Sweden", "Czech"), c("Male", "Female"))
+  dimnames = list(c("Bayern", "Belgien", "Schweden", "Tschechien"), c("maennlich", "weiblich"))
 )
 knitr::kable(mat_sex)
 d_sex <- as.data.frame(as.table(mat_sex))
 names(d_sex) <- c("Land", "Geschlecht", "Anteil")
 knitr::kable(d_sex)
-
+d_sex$Anteil <- as.numeric(sub("%", "", d_sex$Anteil))
 p <- ggplot(data = d_sex, mapping = aes(
   x = `Land`, fill = `Geschlecht`, y = `Anteil`
 ))
-p + geom_col() + geom_hline(aes(yintercept=4.5),colour="red",linetype="dashed")
+p + geom_col() + geom_hline(aes(yintercept=50),colour="red",linetype="dashed")+
+  ggtitle("Geschlechteranteil Faelle")+
+  theme(axis.text.x = element_text(angle = 45,hjust = 1,vjust = 1,colour = "black"),
+        plot.title = element_text(size="25",lineheight =.6,face = "bold",colour = "black"),
+        axis.title.x = element_text(colour = "black",size = "20"),
+        axis.title.y = element_text(colour = "black",size = "20"),
+        axis.text.y = element_text(angle=0, vjust=0.5, size=10,colour = "black"))+
+  theme(plot.title = element_text(hjust = 0.5))+labs(y="Anteil(%)")
 
 ##Bilden von Inzidenz Tabelle (Beispiele)
 incidence30 <- daily.incedence(Daten, end = "2020-11-14", intervall = 30, relative = FALSE)
@@ -352,7 +359,7 @@ ggplot(todesfall.vergleich,aes(Land, Todesfaelle))+
 
 #Geschlecht Anteil
 
-read.csv("data/bavaria/lgl/tabelle_08_20201221.csv")
+read.csv("data/bavaria/lgl/tabelle_08_2021-01-04.csv")
 sub1<-subset(Data2,Geschlecht=="F")
 sum(sub1$Todesfälle)
 sub2<-subset(Data2,Geschlecht=="M")
@@ -387,24 +394,24 @@ mat_sex <- matrix(
   c(percbayernM, percBelM01, percSweM01, percCzeM01, 
     percbayernW, percBelW01, percSweW01, percCzeW01),
   nrow=4, ncol=2,
-  dimnames = list(c("Bayern", "Belgien", "Sweden", "Czech"), c("Male", "Female"))
+  dimnames = list(c("Bayern", "Belgien", "Schweden", "Tschechien"), c("maennlich", "weiblich"))
 )
 knitr::kable(mat_sex)
 d_sex <- as.data.frame(as.table(mat_sex))
 names(d_sex) <- c("Land", "Geschlecht", "Anteil")
 knitr::kable(d_sex)
-
+d_sex$Anteil <- as.numeric(sub("%", "", d_sex$Anteil))
 p <- ggplot(data = d_sex, mapping = aes(
   x = `Land`, fill = `Geschlecht`, y = `Anteil`
 ))
-p + geom_col() + geom_hline(aes(yintercept=3.5),colour="red",linetype="dashed")+
+p + geom_col() + geom_hline(aes(yintercept=50),colour="red",linetype="dashed")+
   ggtitle("Anteil nach Geschleht Todeszahl")+
-  theme(axis.text.x = element_text(angle = 0,hjust = 0.5,vjust = 1,colour = "black",size = "16"),
-        plot.title = element_text(size="20",lineheight =.6,face = "bold",colour = "brown"),
-        axis.title.x = element_text(colour = "brown",size = "20"),
-        axis.title.y = element_text(colour = "brown",size = "20"),
-        axis.text.y = element_text(angle=0, hjust=1,vjust=1, size=10,colour = "black"))
-
+  theme(axis.text.x = element_text(angle = 45,hjust = 1,vjust = 1,colour = "black"),
+        plot.title = element_text(size="25",lineheight =.6,face = "bold",colour = "black"),
+        axis.title.x = element_text(colour = "black",size = "20"),
+        axis.title.y = element_text(colour = "black",size = "20"),
+        axis.text.y = element_text(angle=0, vjust=0.5, size=10,colour = "black"))+
+  theme(plot.title = element_text(hjust = 0.5))+labs(y="Anteil(%)")
 # TodesZahl Matrix
 Data1<-(Daten$bavaria$rki$bavaria_rki)
 sub1<- subset(Data1,(Bundesland=="Bayern" & AnzahlTodesfall!= 0))
@@ -429,7 +436,7 @@ max.bay01<-max(aaa01$freq)
 max.bay02<-max(aaa02$freq)
 
 #Belgien
-countsub.bel <- count(Data2,var='Todesfälle')
+countsub.bel <- count(sub02,var='Todesfälle')
 sum.bel<-sum(Data2$Todesfälle)
 deadDailyBelgien<- sub02 %>% count("Datum")
 deadDailyBelgien
