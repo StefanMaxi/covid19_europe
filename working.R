@@ -203,17 +203,25 @@ incidencefourland
 
 
 incidencefourland2 <- ggplot(data = incidence7proEinwohner, show.legend=TRUE)+ggtitle("7-Tage-Inzidenz pro 100.000 Einwohner")+xlab("Meldewoche")+ylab("Faelle pro 100.000 Einwohner")+
-  geom_line(aes(x=Datum,y=Bayern),colour="red",show.legend =TRUE)+
-  geom_line(aes(x=Datum,y=Belgien),colour="blue",show.legend =TRUE)+
-  geom_line(aes(x=Datum,y=Schweden),colour="yellow",show.legend =TRUE)+
-  geom_line(aes(x=Datum,y=Tschechien),colour="green",show.legend =TRUE)+
-  scale_x_date(date_breaks = "1 week")+
+  theme(axis.text.x = element_text(angle = 45,hjust = 1,vjust = 1,colour = "black"),
+        plot.title = element_text(size="25",lineheight =.6,face = "bold",colour = "black"),
+        axis.title.x = element_text(colour = "black",size = "20"),
+        axis.title.y = element_text(colour = "black",size = "20"),
+        axis.text.y = element_text(angle=0, vjust=0.5, size=10,colour = "black"))+
+  geom_line(aes(x=Datum,y=Bayern),colour="red",show.legend =TRUE, size = 1.3)+
+  geom_line(aes(x=Datum,y=Belgien),colour="blue",show.legend =TRUE, size = 1.3)+
+  geom_line(aes(x=Datum,y=Schweden),colour="yellow",show.legend =TRUE, size = 1.3)+
+  geom_line(aes(x=Datum,y=Tschechien),colour="green",show.legend =TRUE, size = 1.3)+
+  scale_x_date(date_breaks = "1 month")+
   scale_y_continuous(breaks=c(100,200,300,400,500,600,700,800,900,1000))+
   scale_colour_discrete(name="Land",
                         breaks=c("Bayern","Belgien","Schweden","Tschechien"),
                         labels=c("Bayern","Belgien","Schweden","Tschechien"))+
   geom_hline(aes(yintercept=100),colour="red",linetype="dashed")+
-  mytheme
+  geom_hline(aes(yintercept=500),colour="red",linetype="dashed")+
+  theme(plot.title = element_text(hjust = 0.5))
+
+
 incidencefourland2
 
 incidence3 <- daily.incedence(Daten, end = "2020-11-14", intervall = 3, relative = FALSE)
@@ -405,8 +413,8 @@ p <- ggplot(data = d_sex, mapping = aes(
   x = `Land`, fill = `Geschlecht`, y = `Anteil`
 ))
 p + geom_col() + geom_hline(aes(yintercept=50),colour="red",linetype="dashed")+
-  ggtitle("Anteil nach Geschleht Todeszahl")+
-  theme(axis.text.x = element_text(angle = 45,hjust = 1,vjust = 1,colour = "black"),
+  ggtitle("Geschlechtanteil Todesfaelle")+
+  theme(axis.text.x = element_text(angle = 45,hjust = 1,vjust = 1,colour = "black",size=12),
         plot.title = element_text(size="25",lineheight =.6,face = "bold",colour = "black"),
         axis.title.x = element_text(colour = "black",size = "20"),
         axis.title.y = element_text(colour = "black",size = "20"),
