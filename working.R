@@ -9,6 +9,9 @@ transform.data(Daten)
 View(data)
 View(Daten)
 
+##Bilden von Todesfall/Tag Tabelle (Beispiele)
+deathcases.per.day <- daily.death.cases(Daten, end = "2020-12-30", relative = FALSE)
+
 ##Bilden von Fallzahl/Tag Tabelle (Beispiele)
 cases.per.day <- daily.cases(Daten, end = "2020-12-30", relative = FALSE)
 View(cases.per.day)
@@ -24,10 +27,14 @@ casesfourland <- ggplot(show.legend=TRUE) +
   geom_line(data = cases.per.day, mapping = aes(x=Datum, y=Belgien), colour="blue", size = 0.5,show.legend = TRUE)+
   geom_line(data = cases.per.day, mapping = aes(x=Datum, y=Schweden), colour="yellow", size = 0.5,show.legend = TRUE)+
   geom_line(data = cases.per.day, mapping = aes(x=Datum, y=Tschechien), colour="green", size = 0.5,show.legend = TRUE)+
-  ggtitle("Infektionsentwicklungen pro Tag in vier Länder")+
-  scale_x_date(date_breaks = "1 week")+
-  theme(plot.title = element_text(size="20",color="brown",face = "bold"),
-        axis.text.x = element_text(angle = 45,hjust = 0.5,vjust = 0.5))+
+  ggtitle("Infektionsentwicklungen")+
+  scale_x_date(date_breaks = "1 week",expand = c(0,0))+
+  theme(axis.text.x = element_text(angle = 45,hjust =1,vjust = 1,colour = "black"),
+        plot.title = element_text(size="35",lineheight =.6,face = "bold",colour = "black",hjust = 0.5),
+        axis.title.x = element_text(colour = "black",size = "25"),
+        axis.title.y = element_text(colour = "black",size = "25"),
+        axis.text.y = element_text(angle=0, hjust=1,vjust=1, size=10,colour = "black"),
+        plot.margin=unit(rep(1,4),'lines'))+
   xlab("Datum") + ylab("Neue Faelle")+
   geom_hline(aes(yintercept=15000),colour="red",linetype="dashed")
 
@@ -44,9 +51,9 @@ View(cases.per.day.relative1)
 #Bayern Altesgruppe
 bayern.age.and.sex <- (Daten$bavaria$lgl$bavaria_lgl_age)
 #data correction
-bayern.age.and.sex$weiblich <- replace(bayern.age.and.sex$weiblich, c(1:10), bayern.age.and.sex$weiblich*1000)
-bayern.age.and.sex$maennlich <- replace(bayern.age.and.sex$maennlich, c(1:10), bayern.age.and.sex$maennlich*1000)
-#ignore the unknown: bayern.age.and.sex$unbekannt <- replace(bayern.age.and.sex$unbekannt, c(12), bayern.age.and.sex$unbekannt*1000)
+bayern.age.and.sex$weiblich <- replace(bayern.age.and.sex$weiblich, c(1:9), bayern.age.and.sex$weiblich*1000)
+bayern.age.and.sex$maennlich <- replace(bayern.age.and.sex$maennlich, c(1:9), bayern.age.and.sex$maennlich*1000)
+bayern.age.and.sex$unbekannt <- replace(bayern.age.and.sex$unbekannt, c(12), bayern.age.and.sex$unbekannt*1000)
 bayern.age.and.sex %>% mutate_if(is.numeric, ~round(.))
 bayern.age.and.sex <- head(bayern.age.and.sex,-1)
 
@@ -114,7 +121,7 @@ czech.aelter100 <- nrow(Czech.all.cases) - sum(Czech.age.group)
 Czech.age.group <- append(Czech.age.group, czech.aelter100)
 
 Czech.age <- data.frame(Altersgruppe = c("0-9","10-19","20-29","30-39","40-49","50-59","60-69","70-79","80-89","90+"),
-                          Faelle = Czech.age.group)
+                        Faelle = Czech.age.group)
 
 Czech.age
 ggplot(Czech.age,aes(Altersgruppe, Faelle))+geom_bar(stat="identity",position = "dodge")+ggtitle("Czech")
@@ -151,24 +158,17 @@ mat_sex <- matrix(
   c(bayernM, percBelM, percSweM, percCzeM, 
     bayernW, percBelW, percSweW, percCzeW),
   nrow=4, ncol=2,
-  dimnames = list(c("Bayern", "Belgien", "Schweden", "Tschechien"), c("maennlich", "weiblich"))
+  dimnames = list(c("Bayern", "Belgien", "Sweden", "Czech"), c("Male", "Female"))
 )
 knitr::kable(mat_sex)
 d_sex <- as.data.frame(as.table(mat_sex))
 names(d_sex) <- c("Land", "Geschlecht", "Anteil")
 knitr::kable(d_sex)
-d_sex$Anteil <- as.numeric(sub("%", "", d_sex$Anteil))
+
 p <- ggplot(data = d_sex, mapping = aes(
   x = `Land`, fill = `Geschlecht`, y = `Anteil`
 ))
-p + geom_col() + geom_hline(aes(yintercept=50),colour="red",linetype="dashed")+
-  ggtitle("Geschlechteranteil Faelle")+
-  theme(axis.text.x = element_text(angle = 45,hjust = 1,vjust = 1,colour = "black"),
-        plot.title = element_text(size="25",lineheight =.6,face = "bold",colour = "black"),
-        axis.title.x = element_text(colour = "black",size = "20"),
-        axis.title.y = element_text(colour = "black",size = "20"),
-        axis.text.y = element_text(angle=0, vjust=0.5, size=10,colour = "black"))+
-  theme(plot.title = element_text(hjust = 0.5))+labs(y="Anteil(%)")
+p + geom_col() + geom_hline(aes(yintercept=4.5),colour="red",linetype="dashed")
 
 ##Bilden von Inzidenz Tabelle (Beispiele)
 incidence30 <- daily.incedence(Daten, end = "2020-11-14", intervall = 30, relative = FALSE)
@@ -179,6 +179,84 @@ View(incidence7)
 incidence7proEinwohner <- daily.incedence(Daten, end = "2020-12-30", intervall = 7, relative = TRUE)
 View(incidence7proEinwohner)
 
+incidence07a <- subset(incidence7proEinwohner,Datum>="2020-01-28"&Datum<="2020-08-03")
+incidence07b<- subset(incidence7proEinwohner,Datum>="2020-02-04"&Datum<="2020-09-07")
+incidence07c<-subset(incidence7proEinwohner,Datum>="2020-03-01"&Datum<="2020-07-13")
+bay.inzidenz1<-as.data.frame(incidence07a[,c(1,2)])
+#view(bay.inzidenz)
+bel.inzidenz1<-as.data.frame(incidence07c[,c(1,3)])
+#view(bel.inzidenz1)
+sch.inzidenz1<-as.data.frame(incidence07b[,c(1,4)])
+tsc.inzidenz1<-as.data.frame(incidence07c[,c(1,5)])
+
+bay.inzidenz1$number<-seq(1,189,by=1)
+bel.inzidenz1$number<-seq(1,135,by=1)
+inzidenz.four.lands1<-merge(bay.inzidenz1,bel.inzidenz1,by="number",all=TRUE,sort = TRUE)
+sch.inzidenz1$number<-seq(1,217,by=1)
+tsc.inzidenz1$number<-seq(1,135,by=1)
+inzidenz.four.lands2<-merge(sch.inzidenz1,tsc.inzidenz1,by ="number",all=TRUE,sort = TRUE)
+inzidenz.four.lands1final<-merge(inzidenz.four.lands1,inzidenz.four.lands2,by="number",all=TRUE,sort = TRUE)
+
+inzidenz.four.lands1final$New1 <- seq(1,224,by=1)
+view(inzidenz.four.lands1final)
+
+incidencefourland3 <- ggplot(data = inzidenz.four.lands1final, show.legend=TRUE)+ggtitle("7-Tage-InfektInzidenz(1. Welle)")+xlab("Tag")+ylab("7-Tage-Inzidenz")+
+  geom_line(aes(x=number,y=Bayern),colour="red",show.legend =TRUE)+
+  geom_line(aes(x=number,y=Belgien),colour="blue",show.legend =TRUE)+
+  geom_line(aes(x=number,y=Schweden),colour="yellow",show.legend =TRUE)+
+  geom_line(aes(x=number,y=Tschechien),colour="green",show.legend =TRUE)+
+  scale_y_continuous(limits = c(0,1000))+
+  scale_x_continuous(breaks = c(1,7,14,21,28,35,42,49,56,63,70,77,84,91,98,105,112,119,126,133,140,147,154,161,168,175,182,189,196,203,210,217),expand = c(0,0))+
+  theme(axis.text.x = element_text(angle = 0,hjust = 0.5,vjust = 1,colour = "black"),
+        plot.title = element_text(size="35",lineheight =.6,face = "bold",colour = "black"),
+        axis.title.x = element_text(colour = "black",size = "25"),
+        axis.title.y = element_text(colour = "black",size = "25"),
+        axis.text.y = element_text(angle=0, hjust=1,vjust=1, size=10,colour = "black"),
+        plot.margin=unit(rep(1,4),'lines'))
+
+incidencefourland3
+
+
+
+incidence07a2 <- subset(incidence7proEinwohner,Datum>="2020-08-03")
+incidence07b2<- subset(incidence7proEinwohner,Datum>="2020-09-07")
+incidence07c2<-subset(incidence7proEinwohner,Datum>="2020-07-13")
+
+bay.inzidenz2<-as.data.frame(incidence07a2[,c(1,2)])
+bel.inzidenz2<-as.data.frame(incidence07c2[,c(1,3)])
+sch.inzidenz2<-as.data.frame(incidence07b2[,c(1,4)])
+tsc.inzidenz2<-as.data.frame(incidence07c2[,c(1,5)])
+
+bay.inzidenz2$number<-seq(1,150,by=1)
+bel.inzidenz2$number<-seq(1,171,by=1)
+inzidenz.four.lands3<-merge(bay.inzidenz2,bel.inzidenz2,by="number",all=TRUE,sort = TRUE)
+sch.inzidenz2$number<-seq(1,115,by=1)
+tsc.inzidenz2$number<-seq(1,171,by=1)
+inzidenz.four.lands4<-merge(sch.inzidenz2,tsc.inzidenz2,by ="number",all=TRUE,sort = TRUE)
+inzidenz.four.lands2final<-merge(inzidenz.four.lands3,inzidenz.four.lands4,by="number",all=TRUE,sort = TRUE)
+
+incidencefourland4 <- ggplot(data = inzidenz.four.lands2final, show.legend=TRUE)+ggtitle("7-Tage-InfektInzidenz(2. Welle)")+xlab("Tag")+ylab("7-Tage-Inzidenz")+
+  geom_line(aes(x=number,y=Bayern),colour="red",show.legend =TRUE)+
+  geom_line(aes(x=number,y=Belgien),colour="blue",show.legend =TRUE)+
+  geom_line(aes(x=number,y=Schweden),colour="yellow",show.legend =TRUE)+
+  geom_line(aes(x=number,y=Tschechien),colour="green",show.legend =TRUE)+
+  scale_y_continuous(limits = c(0,1000))+
+  scale_x_continuous(breaks = c(1,7,14,21,28,35,42,49,56,63,70,77,84,91,98,105,112,119,126,133,140,147,154,161,168,175,182),expand = c(0,0))+
+  theme(axis.text.x = element_text(angle = 0,hjust = 0.5,vjust = 1,colour = "black"),
+        plot.title = element_text(size="35",lineheight =.6,face = "bold",colour = "black"),
+        axis.title.x = element_text(colour = "black",size = "25"),
+        axis.title.y = element_text(colour = "black",size = "25"),
+        axis.text.y = element_text(angle=0, hjust=1,vjust=1, size=10,colour = "black"),
+        plot.margin=unit(rep(1,4),'lines'))
+
+incidencefourland4
+
+
+
+
+# Belgien!=0 | Schweden!=0 |Tschechien!=0)
+view(incidence7a)
+
 #incidencefourland
 mytheme <- theme(plot.title = element_text(size="20",color="brown",face = "bold"),
                  axis.text.x = element_text(angle = 45,hjust = 0.5,vjust = 0.5),
@@ -186,7 +264,7 @@ mytheme <- theme(plot.title = element_text(size="20",color="brown",face = "bold"
                  legend.position = "top",
                  #scale_color_manual(name = "Land", values=c("Bayern"="red", "Belgien"="blue", "Schweden"="green","Tschechien"="yellow")) ,
                  #scale_linetype_manual(name = "Land", values=c("Bayern"=2, "Belgien"=1, "Schweden"=9,"Tschechien"=2))
-    )
+)
 incidencefourland <- ggplot(data = incidence7, show.legend=TRUE)+ggtitle("Faelle pro Woche")+xlab("Meldewoche")+ylab("Faelle")+
   geom_line(aes(x=Datum,y=Bayern),colour="orange",show.legend =TRUE)+
   geom_line(aes(x=Datum,y=Belgien),colour="sky blue",show.legend =TRUE)+
@@ -203,25 +281,17 @@ incidencefourland
 
 
 incidencefourland2 <- ggplot(data = incidence7proEinwohner, show.legend=TRUE)+ggtitle("7-Tage-Inzidenz pro 100.000 Einwohner")+xlab("Meldewoche")+ylab("Faelle pro 100.000 Einwohner")+
-  theme(axis.text.x = element_text(angle = 45,hjust = 1,vjust = 1,colour = "black"),
-        plot.title = element_text(size="25",lineheight =.6,face = "bold",colour = "black"),
-        axis.title.x = element_text(colour = "black",size = "20"),
-        axis.title.y = element_text(colour = "black",size = "20"),
-        axis.text.y = element_text(angle=0, vjust=0.5, size=10,colour = "black"))+
-  geom_line(aes(x=Datum,y=Bayern),colour="red",show.legend =TRUE, size = 1.3)+
-  geom_line(aes(x=Datum,y=Belgien),colour="blue",show.legend =TRUE, size = 1.3)+
-  geom_line(aes(x=Datum,y=Schweden),colour="yellow",show.legend =TRUE, size = 1.3)+
-  geom_line(aes(x=Datum,y=Tschechien),colour="green",show.legend =TRUE, size = 1.3)+
-  scale_x_date(date_breaks = "1 month")+
+  geom_line(aes(x=Datum,y=Bayern),colour="red",show.legend =TRUE)+
+  geom_line(aes(x=Datum,y=Belgien),colour="blue",show.legend =TRUE)+
+  geom_line(aes(x=Datum,y=Schweden),colour="yellow",show.legend =TRUE)+
+  geom_line(aes(x=Datum,y=Tschechien),colour="green",show.legend =TRUE)+
+  scale_x_date(date_breaks = "1 week")+
   scale_y_continuous(breaks=c(100,200,300,400,500,600,700,800,900,1000))+
   scale_colour_discrete(name="Land",
                         breaks=c("Bayern","Belgien","Schweden","Tschechien"),
                         labels=c("Bayern","Belgien","Schweden","Tschechien"))+
   geom_hline(aes(yintercept=100),colour="red",linetype="dashed")+
-  geom_hline(aes(yintercept=500),colour="red",linetype="dashed")+
-  theme(plot.title = element_text(hjust = 0.5))
-
-
+  mytheme
 incidencefourland2
 
 incidence3 <- daily.incedence(Daten, end = "2020-11-14", intervall = 3, relative = FALSE)
@@ -229,6 +299,39 @@ View(incidence3)
 
 incidence7abs <- daily.incedence(Daten, end = "2020-11-14", intervall = 7, relative = TRUE)
 View(incidence7abs)
+
+
+#Todeszahl
+bavaria_death  <- subset(readRDS("data/bavaria/deaths_temporal_prepared.rds"), state == "Bayern")
+bavaria_deathdaily <- bavaria_death %>% select(1,3)
+names(bavaria_deathdaily)[1] <- 'Datum'
+bavaria_deathdaily <- bavaria_deathdaily %>% mutate(Datum = as.character(Datum)) 
+names(bavaria_deathdaily)[2] <- 'Bayern'
+
+TschechienTot <- (Daten$czech$czech_9)
+czechdeathdaily <- count(TschechienTot$Datum)
+czechdeathdaily <- as.data.frame(czechdeathdaily)
+names(czechdeathdaily)[1] <- 'Datum'
+names(czechdeathdaily)[2] <- 'Tschechien'
+
+BelgienTot <- as.data.table(copy(Daten$belgium$belgium_mortality)[, c(1,5)][, sum(Todesfälle), by = "Datum"][, Todesfälle := V1][, V1 := NULL][-.N])
+names(BelgienTot)[2] <- 'Belgien'
+
+SchwedenTot <- (Daten$sweden$sweden_2)
+names(SchwedenTot)[2] <- 'Schweden'
+Datum = seq(from = as.Date("2020-03-11"), to = as.Date("2020-12-30"), by = 'day')
+SchwedenTot1 <- cbind(SchwedenTot, Datum)
+SchwedenTot1 <- SchwedenTot1 %>% select(2,3)
+SchwedenTot1
+names(SchwedenTot1)[2] <- 'Datum'
+SchwedenTot1 <- SchwedenTot1 %>% mutate(Datum = as.character(Datum)) 
+
+Tot <- merge(BelgienTot, czechdeathdaily, all = TRUE)
+Tot <- merge(Tot, bavaria_deathdaily, by='Datum',all = TRUE)
+Tot <- merge(Tot, SchwedenTot1, by='Datum',all = TRUE)
+
+Tot[is.na(Tot)] <- 0
+view(Tot)
 
 
 ##Geschlecht
@@ -247,16 +350,17 @@ ggplot(data = sub,aes(x=Geschlecht,y=AnzahlTodesfall))+
         axis.text.y = element_text(angle=0, vjust=0.5, size=10,colour = "black"))
 
 #Todesfall in Bayern pro Tag
-ggplot(data = sub,aes(as.Date(Meldedatum),AnzahlTodesfall))+
-  geom_bar(stat="identity",fill="purple")+
+tod.bay <- as.data.frame(Tot[,c(1,4)])
+ggplot(data = tod.bay,aes(as.Date(Datum),Bayern))+
+  geom_bar(stat="identity",fill="red")+
   theme(axis.text.x = element_text(angle = 45,hjust = 1,vjust = 1,colour = "black"),
-        plot.title = element_text(size="20",lineheight =.6,face = "bold",colour = "brown"),
-        axis.title.x = element_text(colour = "brown",size = "16"),
-        axis.title.y = element_text(colour = "brown",size = "16"),
+        plot.title = element_text(size="30",lineheight =.6,face = "bold",colour = "black"),
+        axis.title.x = element_text(colour = "black",size = "25"),
+        axis.title.y = element_text(colour = "black",size = "25"),
         axis.text.y = element_text(angle=0, vjust=0.5, size=10,colour = "black"))+
   scale_x_date(date_breaks = "1 weeks")+
-  scale_y_continuous(breaks=c(0,50,100,150,200,250,300,350,400,450,500),expand = c(0,0))+
-  xlab("Date")+ylab("AnzahlTodesfall")+ggtitle("Todeszahl pro Tag in Bayern")
+  scale_y_continuous(breaks=c(0,50,100,150,200,250),limits = c(0,250))+
+  xlab("Datum")+ylab("Todesfaelle pro Tag")+ggtitle("Todesfaelle pro Tag in Bayern")
 
 #Belgium
 Data2 <- (Daten$belgium$belgium_mortality)
@@ -271,17 +375,18 @@ ggplot(data=Data2,aes(x=Geschlecht,y=Todesfälle))+
         axis.text.y = element_text(angle=0, vjust=0.5, size=10,colour = "black"))
 
 #Todesfall in Belgium pro Tag
-countsub.bel <- count(Data2$Datum)
-ggplot(data = countsub.bel,aes(as.Date(x),freq))+
-  geom_bar(stat="identity",fill="purple")+
+tod.bel <- as.data.frame(Tot[,c(1,2)])
+ggplot(data = tod.bel,aes(as.Date(Datum),Belgien))+
+  geom_bar(stat="identity",fill="red")+
   theme(axis.text.x = element_text(angle = 45,hjust = 1,vjust = 1,colour = "black"),
-        plot.title = element_text(size="20",lineheight =.6,face = "bold",colour = "brown"),
-        axis.title.x = element_text(colour = "brown",size = "16"),
-        axis.title.y = element_text(colour = "brown",size = "16"),
+        plot.title = element_text(size="30",lineheight =.6,face = "bold",colour = "black"),
+        axis.title.x = element_text(colour = "black",size = "25"),
+        axis.title.y = element_text(colour = "black",size = "25"),
         axis.text.y = element_text(angle=0, vjust=0.5, size=10,colour = "black"))+
   scale_x_date(date_breaks = "1 weeks")+
-  scale_y_continuous(expand = c(0,0))+
-  xlab("Date")+ylab("AnzahlTodesfall")+ggtitle("Todeszahl pro Tag in Belgium")
+  scale_y_continuous(breaks=c(0,50,100,150,200,250,300,350),limits = c(0,350))+
+  xlab("Datum")+ylab("Todesfaelle pro Tag")+ggtitle("Todesfaelle pro Tag in Belgien")
+
 
 #Tschechien
 Data3 <- (Daten$czech$czech_9)
@@ -298,16 +403,17 @@ ggplot(data=Data3,aes(x=Geschlecht))+
         axis.text.y = element_text(angle=0, vjust=0.5, size=10,colour = "black"))
 
 #Todesfall in Tschechien pro Tag
-ggplot(data = Data3,aes(x=as.Date(Datum)))+
-  geom_bar(stat="count",fill="purple")+
+tod.tsc <- as.data.frame(Tot[,c(1,3)])
+ggplot(data = tod.tsc,aes(as.Date(Datum),Tschechien))+
+  geom_bar(stat="identity",fill="red")+
   theme(axis.text.x = element_text(angle = 45,hjust = 1,vjust = 1,colour = "black"),
-        plot.title = element_text(size="20",lineheight =.6,face = "bold",colour = "brown"),
-        axis.title.x = element_text(colour = "brown",size = "16"),
-        axis.title.y = element_text(colour = "brown",size = "16"),
+        plot.title = element_text(size="30",lineheight =.6,face = "bold",colour = "black"),
+        axis.title.x = element_text(colour = "black",size = "25"),
+        axis.title.y = element_text(colour = "black",size = "25"),
         axis.text.y = element_text(angle=0, vjust=0.5, size=10,colour = "black"))+
   scale_x_date(date_breaks = "1 weeks")+
-  scale_y_continuous(breaks=c(0,50,100,150,200,250,300,350,400,450,500),expand = c(0,0))+
-  xlab("Date")+ylab("AnzahlTodesfall")+ggtitle("Todeszahl pro Tag in Tschechien")
+  scale_y_continuous(breaks=c(0,50,100,150,200,250),limits = c(0,250))+
+  xlab("Datum")+ylab("Todesfaelle pro Tag")+ggtitle("Todesfaelle pro Tag in Tscheschien")
 
 
 #Schweden
@@ -325,17 +431,18 @@ ggplot(data = Data4,aes(x=Geschlecht,y=Todesfälle))+
         axis.text.y = element_text(angle=0, vjust=0.5, size=10,colour = "black"))
 
 #Todesfall in Schweden pro Tag
-Data04 <- read.csv("data/sweden/Schweden02.csv")
-ggplot(data = Data04,aes(as.Date(Datum),Todesfall))+
-  geom_bar(stat="identity",fill="purple")+
+tod.sch <- as.data.frame(Tot[,c(1,5)])
+ggplot(data = tod.sch,aes(as.Date(Datum),Schweden))+
+  geom_bar(stat="identity",fill="red")+
   theme(axis.text.x = element_text(angle = 45,hjust = 1,vjust = 1,colour = "black"),
-        plot.title = element_text(size="20",lineheight =.6,face = "bold",colour = "brown"),
-        axis.title.x = element_text(colour = "brown",size = "16"),
-        axis.title.y = element_text(colour = "brown",size = "16"),
-        axis.text.y = element_text(angle=0, hjust=1,vjust=1, size=10,colour = "black"))+
+        plot.title = element_text(size="30",lineheight =.6,face = "bold",colour = "black"),
+        axis.title.x = element_text(colour = "black",size = "25"),
+        axis.title.y = element_text(colour = "black",size = "25"),
+        axis.text.y = element_text(angle=0, vjust=0.5, size=10,colour = "black"))+
   scale_x_date(date_breaks = "1 weeks")+
-  scale_y_continuous(breaks=c(0,20,40,60,80,100,120),expand = c(0,0))+
-  xlab("Date")+ylab("AnzahlTodesfall")+ggtitle("Todeszahl pro Tag in Schweden")
+  scale_y_continuous(breaks=c(0,50,100,150,200,250,300,350),limits = c(0,350))+
+  xlab("Datum")+ylab("Todesfaelle pro Tag")+ggtitle("Todesfaelle pro Tag in Schweden")
+
 
 
 
@@ -367,7 +474,7 @@ ggplot(todesfall.vergleich,aes(Land, Todesfaelle))+
 
 #Geschlecht Anteil
 
-read.csv("data/bavaria/lgl/tabelle_08_2021-01-04.csv")
+read.csv("data/bavaria/lgl/tabelle_08_20201221.csv")
 sub1<-subset(Data2,Geschlecht=="F")
 sum(sub1$Todesfälle)
 sub2<-subset(Data2,Geschlecht=="M")
@@ -402,24 +509,24 @@ mat_sex <- matrix(
   c(percbayernM, percBelM01, percSweM01, percCzeM01, 
     percbayernW, percBelW01, percSweW01, percCzeW01),
   nrow=4, ncol=2,
-  dimnames = list(c("Bayern", "Belgien", "Schweden", "Tschechien"), c("maennlich", "weiblich"))
+  dimnames = list(c("Bayern", "Belgien", "Sweden", "Czech"), c("Male", "Female"))
 )
 knitr::kable(mat_sex)
 d_sex <- as.data.frame(as.table(mat_sex))
 names(d_sex) <- c("Land", "Geschlecht", "Anteil")
 knitr::kable(d_sex)
-d_sex$Anteil <- as.numeric(sub("%", "", d_sex$Anteil))
+
 p <- ggplot(data = d_sex, mapping = aes(
   x = `Land`, fill = `Geschlecht`, y = `Anteil`
 ))
-p + geom_col() + geom_hline(aes(yintercept=50),colour="red",linetype="dashed")+
-  ggtitle("Geschlechtanteil Todesfaelle")+
-  theme(axis.text.x = element_text(angle = 45,hjust = 1,vjust = 1,colour = "black",size=12),
-        plot.title = element_text(size="25",lineheight =.6,face = "bold",colour = "black"),
-        axis.title.x = element_text(colour = "black",size = "20"),
-        axis.title.y = element_text(colour = "black",size = "20"),
-        axis.text.y = element_text(angle=0, vjust=0.5, size=10,colour = "black"))+
-  theme(plot.title = element_text(hjust = 0.5))+labs(y="Anteil(%)")
+p + geom_col() + geom_hline(aes(yintercept=3.5),colour="red",linetype="dashed")+
+  ggtitle("Anteil nach Geschleht Todeszahl")+
+  theme(axis.text.x = element_text(angle = 0,hjust = 0.5,vjust = 1,colour = "black",size = "16"),
+        plot.title = element_text(size="20",lineheight =.6,face = "bold",colour = "brown"),
+        axis.title.x = element_text(colour = "brown",size = "20"),
+        axis.title.y = element_text(colour = "brown",size = "20"),
+        axis.text.y = element_text(angle=0, hjust=1,vjust=1, size=10,colour = "black"))
+
 # TodesZahl Matrix
 Data1<-(Daten$bavaria$rki$bavaria_rki)
 sub1<- subset(Data1,(Bundesland=="Bayern" & AnzahlTodesfall!= 0))
@@ -444,8 +551,11 @@ max.bay01<-max(aaa01$freq)
 max.bay02<-max(aaa02$freq)
 
 #Belgien
-countsub.bel <- count(sub02,var='Todesfälle')
+countsub.bel <- count(Data2,var='Todesfälle')
 sum.bel<-sum(Data2$Todesfälle)
+Data2 %>% group_by(Datum,Todesfälle)
+sub200 <-summarise(sub002,sum_Todesfälle=sum(Todesfälle))
+
 deadDailyBelgien<- sub02 %>% count("Datum")
 deadDailyBelgien
 
@@ -486,6 +596,32 @@ mat_sex <- matrix(
   dimnames = list(c("Bayern", "Belgien", "Tschechien", "Schweden"), c("Sum der Todesfallzahl","Maximum Todesfallzahl","Maximum.1.Welle","Maximum.2.Welle"))
 )
 knitr::kable(mat_sex)
+
+#Kennwerte Aufgabe02
+infektion01 <- subset(cases.per.day,Datum<="2020-08-31")
+max(infektion01$Bayern)
+max(infektion01$Belgien)
+max(infektion01$Schweden)
+max(infektion01$Tschechien)
+infektion02<-subset(cases.per.day,Datum>="2020-08-31")
+max(infektion02$Bayern)
+max(infektion02$Belgien)
+max(infektion02$Schweden)
+max(infektion02$Tschechien)
+infektion03 <- subset(cases.per.day,Datum>="2020-11-23")
+max(infektion03$Tschechien)
+
+inzidenz01 <- subset(incidence7proEinwohner,Datum<="2020-08-31")
+max(inzidenz01$Bayern)
+max(inzidenz01$Belgien)
+max(inzidenz01$Schweden)
+max(inzidenz01$Tschechien)
+inzidenz02 <-subset(incidence7proEinwohner,Datum>="2020-08-31")
+max(inzidenz02$Bayern)
+max(inzidenz02$Belgien)
+max(inzidenz02$Schweden)
+max(inzidenz02$Tschechien)
+
 
 #Balkendiagramm Fälle pro Tag Vorpräsentation 
 #Anpassen der Daten 
@@ -533,4 +669,213 @@ balken.schweden <- ggplot(cases.per.day.schweden, aes(Datum, Schweden))+
   geom_hline(yintercept=1000, linetype="dashed", color = "red")+
   geom_hline(yintercept = 5000, linetype = "dashed", color = "red")+
   scale_x_date(date_breaks = "1 month")
+
+
+#Todincidence pro 7 Tag
+Todincidence7proW<-read.csv("Todesfälle_vergleichbar.csv")
+Todincidence07a <- subset(Todincidence7proW,Datum<="2020-08-03")
+Todincidence07b<- subset(Todincidence7proW,Datum<="2020-09-07")
+Todincidence07c<-subset(Todincidence7proW,Datum<="2020-07-13")
+bay.todinzidenz1<-as.data.frame(Todincidence07a[,c(2,3)])
+bel.todinzidenz1<-as.data.frame(Todincidence07c[,c(2,4)])
+sch.todinzidenz1<-as.data.frame(Todincidence07b[,c(2,5)])
+tsc.todinzidenz1<-as.data.frame(Todincidence07c[,c(2,6)])
+
+bay.todinzidenz1$number<-seq(1,147,by=1)
+bel.todinzidenz1$number<-seq(1,126,by=1)
+Todinzidenz.four.lands1<-merge(bay.todinzidenz1,bel.todinzidenz1,by="number",all=TRUE,sort = TRUE)
+sch.todinzidenz1$number<-seq(1,182,by=1)
+tsc.todinzidenz1$number<-seq(1,126,by=1)
+Todinzidenz.four.lands2<-merge(sch.todinzidenz1,tsc.todinzidenz1,by ="number",all=TRUE,sort = TRUE)
+Todinzidenz.four.lands1final<-merge(Todinzidenz.four.lands1,Todinzidenz.four.lands2,by="number",all=TRUE,sort = TRUE)
+
+
+
+Todincidencefourland3 <- ggplot(data = Todinzidenz.four.lands1final, show.legend=TRUE)+ggtitle("7-Tage-TodesInzidenz (1. Welle)")+xlab("Tag")+ylab("7-Tage-Inzidenz")+
+  geom_line(aes(x=number,y=Bayern),colour="red",show.legend =TRUE)+
+  geom_line(aes(x=number,y=Belgien),colour="blue",show.legend =TRUE)+
+  geom_line(aes(x=number,y=Schweden),colour="green",show.legend =TRUE)+
+  geom_line(aes(x=number,y=Tschechien),colour="yellow",show.legend =TRUE)+
+  scale_y_continuous(breaks = c(0.00,0.25,0.50,0.75,1.00,1.25),limits = c(0.00,1.25))+
+  scale_x_continuous(breaks = c(1,7,14,21,28,35,42,49,56,63,70,77,84,91,98,105,112,119,126,133,140,147,154,161,168,175,182),expand = c(0,0))+
+  theme(axis.text.x = element_text(angle = 0,hjust = 0.5,vjust = 1,colour = "black"),
+        plot.title = element_text(size="35",lineheight =.6,face = "bold",colour = "black"),
+        axis.title.x = element_text(colour = "black",size = "25"),
+        axis.title.y = element_text(colour = "black",size = "25"),
+        axis.text.y = element_text(angle=0, hjust=1,vjust=1, size=10,colour = "black"),
+        plot.margin=unit(rep(1,4),'lines'))
+
+Todincidencefourland3
+
+
+
+Todincidence07a2<- subset(Todincidence7proW,Datum >= "2020-08-03")
+Todincidence07b2<- subset(Todincidence7proW,Datum >= "2020-09-07")
+Todincidence07c2<-subset(Todincidence7proW,Datum >= "2020-07-13")
+bay.todinzidenz2<-as.data.frame(Todincidence07a2[,c(2,3)])
+bel.todinzidenz2<-as.data.frame(Todincidence07c2[,c(2,4)])
+sch.todinzidenz2<-as.data.frame(Todincidence07b2[,c(2,5)])
+tsc.todinzidenz2<-as.data.frame(Todincidence07c2[,c(2,6)])
+
+bay.todinzidenz2$number<-seq(1,157,by=1)
+bel.todinzidenz2$number<-seq(1,178,by=1)
+Todinzidenz.four.lands2.1<-merge(bay.todinzidenz2,bel.todinzidenz2,by="number",all=TRUE,sort = TRUE)
+sch.todinzidenz2$number<-seq(1,122,by=1)
+tsc.todinzidenz2$number<-seq(1,178,by=1)
+Todinzidenz.four.lands2.2<-merge(sch.todinzidenz2,tsc.todinzidenz2,by ="number",all=TRUE,sort = TRUE)
+Todinzidenz.four.lands2final<-merge(Todinzidenz.four.lands2.1,Todinzidenz.four.lands2.2,by="number",all=TRUE,sort = TRUE)
+
+
+
+Todincidencefourland4 <- ggplot(data = Todinzidenz.four.lands2final, show.legend=TRUE)+ggtitle("7-Tage-TodesInzidenz (2. Welle)")+xlab("Tag")+ylab("7-Tage-Inzidenz")+
+  geom_line(aes(x=number,y=Bayern),colour="red",show.legend =TRUE)+
+  geom_line(aes(x=number,y=Belgien),colour="blue",show.legend =TRUE)+
+  geom_line(aes(x=number,y=Schweden),colour="yellow",show.legend =TRUE)+
+  geom_line(aes(x=number,y=Tschechien),colour="green",show.legend =TRUE)+
+  scale_y_continuous(breaks = c(0.00,0.25,0.50,0.75,1.00,1.25),limits = c(0.00,1.25))+
+  scale_x_continuous(breaks = c(1,7,14,21,28,35,42,49,56,63,70,77,84,91,98,105,112,119,126,133,140,147,154,161,168,175,182),expand = c(0,0))+
+  theme(axis.text.x = element_text(angle = 45,hjust = 0.5,vjust = 1,colour = "black"),
+        plot.title = element_text(size="35",lineheight =.6,face = "bold",colour = "black"),
+        axis.title.x = element_text(colour = "black",size = "25"),
+        axis.title.y = element_text(colour = "black",size = "25"),
+        axis.text.y = element_text(angle=0, hjust=1,vjust=1, size=10,colour = "black"),
+        plot.margin=unit(rep(1,4),'lines'))
+Todincidencefourland4
+
+subTodInzi<-subset(Todincidence7proW,Datum<="2020-01-06")
+deathincidencefourland <- ggplot(show.legend=TRUE) +
+  geom_line(data = Todincidence7proW, mapping = aes(x=as.Date(Datum), y=Bayern), colour="red", size = 0.5,show.legend = TRUE) +
+  geom_line(data = Todincidence7proW, mapping = aes(x=as.Date(Datum), y=Belgien), colour="blue", size = 0.5,show.legend = TRUE)+
+  geom_line(data = Todincidence7proW, mapping = aes(x=as.Date(Datum), y=Schweden), colour="yellow", size = 0.5,show.legend = TRUE)+
+  geom_line(data = Todincidence7proW, mapping = aes(x=as.Date(Datum), y=Tschechien), colour="green", size = 0.5,show.legend = TRUE)+
+  ggtitle("TodesInzidenz")+
+  scale_y_continuous(breaks = c(0.00,0.25,0.50,0.75,1.00,1.25),limits = c(0.00,1.25))+
+  scale_x_date(date_breaks = "1 week",expand = c(0, 0))+
+  theme(axis.text.x = element_text(angle = 45,hjust =1,vjust = 1,colour = "black"),
+        plot.title = element_text(size="30",lineheight =.6,face = "bold",colour = "black",hjust = 0.5),
+        axis.title.x = element_text(colour = "black",size = "25"),
+        axis.title.y = element_text(colour = "black",size = "25"),
+        axis.text.y = element_text(angle=0, hjust=1,vjust=1, size=10,colour = "black"),
+        plot.margin=unit(rep(1,4),'lines'))+
+  xlab("Datum") + ylab("TodesInzidenz")
+
+deathincidencefourland
+
+#Todesfaelleentwirklung
+Todesa01 <- subset(Tot,Datum<="2020-08-03")
+Todesb01<- subset(Tot,Datum<="2020-09-07")
+Todesc01<-subset(Tot,Datum<="2020-07-13")
+bay.tod1<-as.data.frame(Todesa01[,c(1,4)])
+bel.tod1<-as.data.frame(Todesc01[,c(1,2)])
+sch.tod1<-as.data.frame(Todesb01[,c(1,5)])
+tsc.tod1<-as.data.frame(Todesc01[,c(1,3)])
+
+
+bay.tod1$number<-seq(1,147,by=1)
+bel.tod1$number<-seq(1,126,by=1)
+Tod.four.lands1<-merge(bay.tod1,bel.tod1,by="number",all=TRUE,sort = TRUE)
+sch.tod1$number<-seq(1,182,by=1)
+tsc.tod1$number<-seq(1,126,by=1)
+Tod.four.lands2<-merge(sch.tod1,tsc.tod1,by ="number",all=TRUE,sort = TRUE)
+Tod.four.lands1final<-merge(Tod.four.lands1,Tod.four.lands2,by="number",all=TRUE,sort = TRUE)
+
+Tod.Belgien1<- ggplot(data = bel.tod1, show.legend=TRUE)+ggtitle("Todesfaelle in Belgien pro Tag (1. Welle)")+xlab("Tag")+ylab("Todesfaelle")+
+  #geom_line(aes(x=number,y=Bayern),color="red",show.legend =TRUE)+
+  geom_line(aes(x=number,y=Belgien),color="blue",show.legend =TRUE)+
+  #geom_line(aes(x=number,y=Schweden),color="yellow",show.legend =TRUE)+
+  #geom_line(aes(x=number,y=Tschechien),color="green",show.legend =TRUE)+
+  scale_y_continuous(breaks = c(0,50,100,150,200,250,300,350),limits = c(0,350))+
+  scale_x_continuous(breaks = c(1,7,14,21,28,35,42,49,56,63,70,77,84,91,98,105,112,119,126,133,140,147,154,161,168,175,182),expand = c(0,0))+
+  theme(axis.text.x = element_text(angle = 0,hjust = 0.5,vjust = 1,colour = "black"),
+        plot.title = element_text(size="30",lineheight =.6,face = "bold",colour = "black",hjust=0.5),
+        axis.title.x = element_text(colour = "black",size = "25"),
+        axis.title.y = element_text(colour = "black",size = "25"),
+        axis.text.y = element_text(angle=0, hjust=1,vjust=1, size=10,colour = "black"),
+        plot.margin=unit(rep(1,4),'lines'))
+
+Tod.Belgien1
+
+
+Tod.fourland3 <- ggplot(data = Tod.four.lands1final, show.legend=TRUE)+ggtitle("Todesfaelle pro Tag (1. Welle)")+xlab("Datum")+ylab("Todesfaelle")+
+  geom_line(aes(x=number,y=Bayern),color="red",show.legend =TRUE)+
+  geom_line(aes(x=number,y=Belgien),color="blue",show.legend =TRUE)+
+  geom_line(aes(x=number,y=Schweden),color="yellow",show.legend =TRUE)+
+  geom_line(aes(x=number,y=Tschechien),color="green",show.legend =TRUE)+
+  scale_y_continuous(breaks = c(0,50,100,150,200,250,300,350),limits = c(0,350))+
+  scale_x_continuous(breaks = c(1,7,14,21,28,35,42,49,56,63,70,77,84,91,98,105,112,119,126,133,140,147,154,161,168,175,182),expand = c(0,0))+
+  theme(axis.text.x = element_text(angle = 0,hjust = 0.5,vjust = 1,colour = "black"),
+        plot.title = element_text(size="35",lineheight =.6,face = "bold",colour = "black"),
+        axis.title.x = element_text(colour = "black",size = "25"),
+        axis.title.y = element_text(colour = "black",size = "25"),
+        axis.text.y = element_text(angle=0, hjust=1,vjust=1, size=10,colour = "black"),
+        plot.margin=unit(rep(1,4),'lines'))
+
+Tod.fourland3
+
+
+Todesa02<- subset(Tot,Datum>="2020-08-03")
+Todesb02<- subset(Tot,Datum>="2020-09-07")
+Todesc02<-subset(Tot,Datum>="2020-07-13")
+bay.tod2<-as.data.frame(Todesa02[,c(1,4)])
+bel.tod2<-as.data.frame(Todesc02[,c(1,2)])
+sch.tod2<-as.data.frame(Todesb02[,c(1,5)])
+tsc.tod2<-as.data.frame(Todesc02[,c(1,3)])
+
+bay.tod2$number<-seq(1,157,by=1)
+bel.tod2$number<-seq(1,178,by=1)
+Tod.four.lands3<-merge(bay.tod2,bel.tod2,by="number",all=TRUE,sort = TRUE)
+sch.tod2$number<-seq(1,122,by=1)
+tsc.tod2$number<-seq(1,178,by=1)
+Tod.four.lands4<-merge(sch.tod2,tsc.tod2,by ="number",all=TRUE,sort = TRUE)
+Tod.four.lands2final<-merge(Tod.four.lands3,Tod.four.lands4,by="number",all=TRUE,sort = TRUE)
+
+Tod.Belgien2<- ggplot(data = bel.tod2, show.legend=TRUE)+ggtitle("Todesfaelle in Belgien pro Tag (2. Welle)")+xlab("Tag")+ylab("Todesfaelle")+
+  #geom_line(aes(x=number,y=Bayern),color="red",show.legend =TRUE)+
+  geom_line(aes(x=number,y=Belgien),color="blue",show.legend =TRUE)+
+  #geom_line(aes(x=number,y=Schweden),color="yellow",show.legend =TRUE)+
+  #geom_line(aes(x=number,y=Tschechien),color="green",show.legend =TRUE)+
+  scale_y_continuous(breaks = c(0,50,100,150,200,250,300,350),limits = c(0,350))+
+  scale_x_continuous(breaks = c(1,7,14,21,28,35,42,49,56,63,70,77,84,91,98,105,112,119,126,133,140,147,154,161,168,175,182),expand = c(0,0))+
+  theme(axis.text.x = element_text(angle = 0,hjust = 0.5,vjust = 1,colour = "black"),
+        plot.title = element_text(size="30",lineheight =.6,face = "bold",colour = "black",hjust=0.5),
+        axis.title.x = element_text(colour = "black",size = "25"),
+        axis.title.y = element_text(colour = "black",size = "25"),
+        axis.text.y = element_text(angle=0, hjust=1,vjust=1, size=10,colour = "black"),
+        plot.margin=unit(rep(1,4),'lines'))
+
+Tod.Belgien2
+
+Tod.fourland4 <- ggplot(data = Tod.four.lands2final, show.legend=TRUE)+ggtitle("Todesfaelle pro Tag (2. Welle)")+xlab("Datum")+ylab("Todesfaelle")+
+  geom_line(aes(x=number,y=Bayern),colour="red",show.legend =TRUE)+
+  geom_line(aes(x=number,y=Belgien),colour="blue",show.legend =TRUE)+
+  geom_line(aes(x=number,y=Schweden),colour="yellow",show.legend =TRUE)+
+  geom_line(aes(x=number,y=Tschechien),colour="green",show.legend =TRUE)+
+  scale_y_continuous(breaks = c(0,50,100,150,200,250,300,350),limits = c(0,350))+
+  scale_x_continuous(breaks = c(1,7,14,21,28,35,42,49,56,63,70,77,84,91,98,105,112,119,126,133,140,147,154,161,168,175,182),expand = c(0,0),limits = c(1,182))+
+  theme(axis.text.x = element_text(angle = 0,hjust = 0.5,vjust = 1,colour = "black"),
+        plot.title = element_text(size="35",lineheight =.6,face = "bold",colour = "black"),
+        axis.title.x = element_text(colour = "black",size = "25"),
+        axis.title.y = element_text(colour = "black",size = "25"),
+        axis.text.y = element_text(angle=0, hjust=1,vjust=1, size=10,colour = "black"),
+        plot.margin=unit(rep(1,4),'lines'))
+
+Tod.fourland4
+
+deathcasesfourland <- ggplot(show.legend=TRUE) +
+  geom_line(data = Tot, mapping = aes(x=as.Date(Datum), y=Bayern), colour="red", size = 0.5,show.legend = TRUE) +
+  geom_line(data = Tot, mapping = aes(x=as.Date(Datum), y=Belgien), colour="blue", size = 0.5,show.legend = TRUE)+
+  geom_line(data = Tot, mapping = aes(x=as.Date(Datum), y=Schweden), colour="yellow", size = 0.5,show.legend = TRUE)+
+  geom_line(data = Tot, mapping = aes(x=as.Date(Datum), y=Tschechien), colour="green", size = 0.5,show.legend = TRUE)+
+  ggtitle("Todesentwicklungen pro Tag in vier Länder")+
+  scale_y_continuous(breaks = c(0,50,100,150,200,250,300,350),limits = c(0,350))+
+  scale_x_date(date_breaks = "1 week")+
+  theme(axis.text.x = element_text(angle = 45,hjust =1,vjust = 1,colour = "black"),
+        plot.title = element_text(size="30",lineheight =.6,face = "bold",colour = "black"),
+        axis.title.x = element_text(colour = "black",size = "25"),
+        axis.title.y = element_text(colour = "black",size = "25"),
+        axis.text.y = element_text(angle=0, hjust=1,vjust=1, size=10,colour = "black"),
+        plot.margin=unit(rep(1,4),'lines'))+
+  xlab("Datum") + ylab("Todesfaelle")
+
+deathcasesfourland
 
